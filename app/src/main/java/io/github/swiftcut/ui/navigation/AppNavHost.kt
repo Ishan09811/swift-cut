@@ -1,4 +1,4 @@
-package io.github.swift-cut.ui.navigation
+package io.github.swiftcut.ui.navigation
 
 import android.content.Context
 import android.content.Intent

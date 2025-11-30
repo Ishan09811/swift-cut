@@ -1,5 +1,5 @@
 
-package io.github.swift-cut
+package io.github.swiftcut
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable

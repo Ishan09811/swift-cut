@@ -1,5 +1,5 @@
 
-package io.github.swift-cut.ui.editor
+package io.github.swiftcut.ui.editor
 
 import android.view.SurfaceView
 import androidx.compose.foundation.background
