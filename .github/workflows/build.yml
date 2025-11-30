@@ -1,0 +1,59 @@
+
+name: Java CI with Gradle
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+
+    - name: Setup Gradle Cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.gradle/caches
+          ~/.gradle/wrapper
+        key: ${{ runner.os }}-android-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-android-
+            
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: 17
+
+    - name: Decode Keystore
+      env:
+        KEYSTORE_ENCODED: ${{ secrets.KEYSTORE }}
+      run: | 
+        echo "$KEYSTORE_ENCODED" | base64 --decode > ${{ github.workspace }}/app/ks.jks
+
+    - name: Build
+      env: 
+        KEYSTORE_PATH: "ks.jks"
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+      run: |
+        ./gradlew assembleRelease
+  
+    - name: Upload build
+      uses: actions/upload-artifact@v4
+      with:
+        name: swiftCut-build
+        path: |
+          app/build/outputs/apk/release/swiftCut-release.apk
