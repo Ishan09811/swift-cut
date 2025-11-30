@@ -30,4 +30,7 @@ fun AppNavHost() {
             // TODO: HomeDestination()
         }
     }
+
+    // TODO: HomeDestination()
+    context.startActivity(Intent(context, EditorActivity::class.java))
 }
