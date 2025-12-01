@@ -29,6 +29,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.platform.LocalContext
 import io.github.swiftcut.R
 import io.github.swiftcut.utils.ProjectStorage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 @Composable
@@ -36,11 +38,17 @@ fun EditorScreen() {
     var importedVideoFile by remember { mutableStateOf<File?>(null) }
     var selectedTool by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     val videoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
-            importedVideoFile = ProjectStorage.copyVideoToProject(context, uri!!, "project_1")
+            scope.launch(Dispatchers.IO) {
+                val file = ProjectStorage.copyVideoToProject(context, uri!!, "project_1")
+                withContext(Dispatchers.Main) {
+                    importedVideoFile = file
+                }
+            }
         }
     )
 
@@ -168,3 +176,4 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
+
