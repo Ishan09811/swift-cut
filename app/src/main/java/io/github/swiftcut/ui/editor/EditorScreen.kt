@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.viewinterop.AndroidView
 import io.github.swiftcut.R
 
@@ -165,7 +166,3 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
-
-
-
-
