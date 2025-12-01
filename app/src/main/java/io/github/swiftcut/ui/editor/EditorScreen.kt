@@ -41,7 +41,6 @@ fun EditorScreen() {
     )
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         Row(modifier = Modifier.fillMaxSize()) {
             ToolPanel(
                 modifier = Modifier.width(90.dp).fillMaxHeight(),
@@ -51,7 +50,8 @@ fun EditorScreen() {
 
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .weight(1f)
+                    .fillMaxHeight()
                     .background(Color.Black)
             ) {
                 VideoPreview(
@@ -166,4 +166,3 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
-
