@@ -27,16 +27,17 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.viewinterop.AndroidView
 import io.github.swiftcut.R
+import io.github.swiftcut.utils.ProjectStorage
 
 @Composable
 fun EditorScreen() {
-    var selectedVideoUri by remember { mutableStateOf<Uri?>(null) }
+    var importedVideoFile by remember { mutableStateOf<File?>(null) }
     var selectedTool by remember { mutableStateOf<String?>(null) }
 
     val videoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
-            selectedVideoUri = uri
+            importedVideoFile = ProjectStorage.copyVideoToProject(context, uri, "project_1")
         }
     )
 
@@ -58,7 +59,7 @@ fun EditorScreen() {
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth(),
-                    videoUri = selectedVideoUri
+                    videoUri = importedVideoFile?.let { Uri.fromFile(it) }
                 )
 
                 TimelineView(
@@ -164,6 +165,3 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
-
-
-
