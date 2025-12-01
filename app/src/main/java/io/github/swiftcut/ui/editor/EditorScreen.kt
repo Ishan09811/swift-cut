@@ -39,7 +39,7 @@ fun EditorScreen() {
         }
     )
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.navigationBars)) {
 
         Row(modifier = Modifier.fillMaxSize()) {
             ToolPanel(
@@ -165,6 +165,7 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
+
 
 
 
