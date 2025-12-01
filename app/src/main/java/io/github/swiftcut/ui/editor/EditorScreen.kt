@@ -40,11 +40,11 @@ fun EditorScreen() {
         }
     )
 
-    Box(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.navigationBars)) {
+    Box(modifier = Modifier.fillMaxSize()) {
 
         Row(modifier = Modifier.fillMaxSize()) {
             ToolPanel(
-                modifier = Modifier.width(90.dp),
+                modifier = Modifier.width(90.dp).fillMaxHeight(),
                 selectedTool = selectedTool,
                 onToolSelected = { selectedTool = it }
             )
@@ -116,7 +116,7 @@ fun ToolPanel(
 ) {
     NavigationRail(
         modifier = modifier,
-        containerColor = Color(0xFF1A1A1A)
+        containerColor = MaterialTheme.colorScheme.surfaceVariant
     ) {
 
         NavigationRailItem(
@@ -166,3 +166,4 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
+
