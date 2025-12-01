@@ -11,6 +11,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ContentCut
+import androidx.compose.material.icons.filled.Speed
+import androidx.compose.material.icons.filled.Brush
+import androidx.compose.material.icons.filled.GraphicEq
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -26,6 +32,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 @Composable
 fun EditorScreen() {
     var selectedVideoUri by remember { mutableStateOf<Uri?>(null) }
+    var selectedTool by remember { mutableStateOf<String?>(null) }
 
     val videoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -38,10 +45,9 @@ fun EditorScreen() {
 
         Row(modifier = Modifier.fillMaxSize()) {
             ToolPanel(
-                modifier = Modifier
-                    .width(80.dp)
-                    .fillMaxHeight()
-                    .background(Color(0xFF1A1A1A))
+                modifier = Modifier.width(90.dp),
+                selectedTool = selectedTool,
+                onToolSelected = { selectedTool = it }
             )
 
             Column(
@@ -104,27 +110,43 @@ fun VideoPreview(
 }
 
 @Composable
-fun ToolPanel(modifier: Modifier) {
-    Column(
-        modifier = modifier.padding(8.dp),
-        verticalArrangement = Arrangement.SpaceEvenly
+fun ToolPanel(
+    modifier: Modifier = Modifier,
+    selectedTool: String? = null,
+    onToolSelected: (String) -> Unit = {}
+) {
+    NavigationRail(
+        modifier = modifier,
+        containerColor = Color(0xFF1A1A1A)
     ) {
-        ToolButton("Cut")
-        ToolButton("Speed")
-        ToolButton("Filters")
-        ToolButton("Audio")
-    }
-}
 
-@Composable
-fun ToolButton(text: String) {
-    Box(
-        modifier = Modifier
-            .size(60.dp)
-            .background(Color.DarkGray, shape = RoundedCornerShape(8.dp)),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text, color = Color.White, fontSize = 12.sp)
+        NavigationRailItem(
+            selected = selectedTool == "cut",
+            onClick = { onToolSelected("cut") },
+            icon = { Icon(Icons.Default.ContentCut, null) },
+            label = { Text("Cut") }
+        )
+
+        NavigationRailItem(
+            selected = selectedTool == "speed",
+            onClick = { onToolSelected("speed") },
+            icon = { Icon(Icons.Default.Speed, null) },
+            label = { Text("Speed") }
+        )
+
+        NavigationRailItem(
+            selected = selectedTool == "filters",
+            onClick = { onToolSelected("filters") },
+            icon = { Icon(Icons.Default.Brush, null) },
+            label = { Text("Filters") }
+        )
+
+        NavigationRailItem(
+            selected = selectedTool == "audio",
+            onClick = { onToolSelected("audio") },
+            icon = { Icon(Icons.Default.GraphicEq, null) },
+            label = { Text("Audio") }
+        )
     }
 }
 
@@ -145,4 +167,5 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
+
 
