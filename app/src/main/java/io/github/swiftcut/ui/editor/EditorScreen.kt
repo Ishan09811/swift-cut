@@ -115,7 +115,7 @@ fun ToolPanel(
     onToolSelected: (String) -> Unit = {}
 ) {
     NavigationRail(
-        modifier = modifier,
+        modifier = modifier.windowInsetsPadding(WindowInsets(0)),
         containerColor = MaterialTheme.colorScheme.surfaceVariant
     ) {
 
@@ -166,3 +166,4 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
+
