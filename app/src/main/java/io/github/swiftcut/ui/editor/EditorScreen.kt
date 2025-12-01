@@ -11,10 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ContentCut
-import androidx.compose.material.icons.filled.Speed
-import androidx.compose.material.icons.filled.Brush
-import androidx.compose.material.icons.filled.GraphicEq
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.FloatingActionButton
@@ -25,9 +21,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import io.github.swiftcut.R
 
 @Composable
 fun EditorScreen() {
@@ -123,28 +121,28 @@ fun ToolPanel(
         NavigationRailItem(
             selected = selectedTool == "cut",
             onClick = { onToolSelected("cut") },
-            icon = { Icon(Icons.Default.ContentCut, null) },
+            icon = { Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_content_cut), contentDescription = null) },
             label = { Text("Cut") }
         )
 
         NavigationRailItem(
             selected = selectedTool == "speed",
             onClick = { onToolSelected("speed") },
-            icon = { Icon(Icons.Default.Speed, null) },
+            icon = { Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_speed), contentDescription = null) },
             label = { Text("Speed") }
         )
 
         NavigationRailItem(
             selected = selectedTool == "filters",
             onClick = { onToolSelected("filters") },
-            icon = { Icon(Icons.Default.Brush, null) },
+            icon = { Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_colorize), contentDescription = null) },
             label = { Text("Filters") }
         )
 
         NavigationRailItem(
             selected = selectedTool == "audio",
             onClick = { onToolSelected("audio") },
-            icon = { Icon(Icons.Default.GraphicEq, null) },
+            icon = { Icon(imageVector = ImageVector.vectorResource(R.drawable.ic_graphic_eq), contentDescription = null) },
             label = { Text("Audio") }
         )
     }
@@ -167,5 +165,6 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
+
 
 
