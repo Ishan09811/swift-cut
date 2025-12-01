@@ -1,7 +1,7 @@
 package io.github.swiftcut.ui.editor
 
 import android.net.Uri
-import android.view.SurfaceView
+import android.view.TextureView
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -94,9 +94,7 @@ fun VideoPreview(
     AndroidView(
         modifier = modifier,
         factory = { context ->
-            SurfaceView(context).apply {
-                setZOrderOnTop(false)
-            }
+            TextureView(context)
         },
         update = { surfaceView ->
             // Not playing yet — just logging selected video for now
@@ -166,4 +164,5 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
+
 
