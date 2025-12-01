@@ -36,7 +36,6 @@ class EditorActivity : ComponentActivity() {
             }
             attributes.layoutInDisplayCutoutMode = LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
         }
-        applyInsetsToPadOverlay()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -44,3 +43,4 @@ class EditorActivity : ComponentActivity() {
         if (hasFocus) enableFullScreenImmersive()
     }
 }
+
