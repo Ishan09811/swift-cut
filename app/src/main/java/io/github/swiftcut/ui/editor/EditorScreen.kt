@@ -55,10 +55,10 @@ fun EditorScreen() {
         }
     )
 
-    Box(modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.displayCutout)) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Row(modifier = Modifier.fillMaxSize()) {
             ToolPanel(
-                modifier = Modifier.width(90.dp).fillMaxHeight(),
+                modifier = Modifier.width(90.dp).fillMaxHeight().windowInsetsPadding(WindowInsets.displayCutout),
                 selectedTool = selectedTool,
                 onToolSelected = { selectedTool = it }
             )
@@ -192,6 +192,7 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
+
 
 
 
