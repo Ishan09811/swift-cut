@@ -73,7 +73,7 @@ fun EditorScreen() {
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth(),
-                    videoUri = Uri.fromFile(importedVideoFile)
+                    videoUri = if (importedVideoFile != null) Uri.fromFile(importedVideoFile) else null
                 )
 
                 TimelineView(
@@ -124,7 +124,7 @@ fun VideoPreview(
             }
         },
         update = {
-            if (videoUri != null) {
+            if (videoUri != null && videoUri != Uri.EMPTY) {
                 val mediaItem = MediaItem.fromUri(videoUri)
                 exoPlayer.setMediaItem(mediaItem)
                 exoPlayer.prepare()
@@ -192,6 +192,7 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
+
 
 
 
