@@ -1,6 +1,6 @@
 [package]
 name = "swiftcut_backend"
-version = "1.0"
+version = "1.0.0"
 edition = "2025"
 
 [lib]
