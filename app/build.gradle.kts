@@ -102,12 +102,12 @@ android {
 cargo {
     module  = "src/main/backend"
     libname = "swiftcut_backend"
-    targets = ["arm64"]
+    targets = listOf("arm64")
 }
 
-tasks.whenTaskAdded { task ->
-    if ((task.name == 'javaPreCompileDebug' || task.name == 'javaPreCompileRelease')) {
-        task.dependsOn 'cargoBuild'
+tasks.whenTaskAdded { task: Task ->
+    if (task.name == "javaPreCompileDebug" || task.name == "javaPreCompileRelease") {
+        task.dependsOn("cargoBuild")
     }
 }
 
