@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("org.mozilla.rust-android-gradle.rust-android")
     id("kotlin-parcelize")
 }
 
@@ -95,6 +96,18 @@ android {
 
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.15"
+    }
+}
+
+cargo {
+    module  = "src/main/backend"
+    libname = "swiftcut_backend"
+    targets = ["arm64"]
+}
+
+tasks.whenTaskAdded { task ->
+    if ((task.name == 'javaPreCompileDebug' || task.name == 'javaPreCompileRelease')) {
+        task.dependsOn 'cargoBuild'
     }
 }
 
