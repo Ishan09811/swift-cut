@@ -105,6 +105,18 @@ cargo {
     targets = listOf("arm64")
 }
 
+tasks.register("installRustTarget") {
+    doLast {
+        exec {
+            commandLine("rustup", "target", "add", "aarch64-linux-android")
+        }
+    }
+}
+
+tasks.named("cargoBuild") {
+    dependsOn("installRustTarget")
+}
+
 tasks.configureEach {
     if (name == "javaPreCompileDebug" || name == "javaPreCompileRelease") {
         dependsOn("cargoBuild")
