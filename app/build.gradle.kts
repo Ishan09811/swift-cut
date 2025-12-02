@@ -129,7 +129,7 @@ tasks.register("installRustTarget") {
 tasks.configureEach {
     if (name == "javaPreCompileDebug" || name == "javaPreCompileRelease") {
         dependsOn("cargoBuild")
-    } else if (name == "cargoBuild") { dependsOn("installRustTarget") }
+    } else if (name == "cargoBuildArm64") { dependsOn("installRustTarget") }
 }
 
 base.archivesName = "swiftCut"
