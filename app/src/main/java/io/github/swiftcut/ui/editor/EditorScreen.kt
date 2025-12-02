@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.platform.LocalContext
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.common.MediaItem
 import io.github.swiftcut.R
 import io.github.swiftcut.utils.ProjectStorage
 import kotlinx.coroutines.Dispatchers
@@ -103,17 +105,30 @@ fun VideoPreview(
     modifier: Modifier = Modifier,
     videoUri: Uri? = null
 ) {
-    // Later: attach this SurfaceView to ExoPlayer with setVideoSurface
+    val context = LocalContext.current
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build()
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
+    
     AndroidView(
         modifier = modifier,
         factory = { context ->
-            TextureView(context)
+            TextureView(context).apply {
+                exoPlayer.setVideoTextureView(this)
+            }
         },
-        update = { surfaceView ->
-            // Not playing yet — just logging selected video for now
+        update = {
             if (videoUri != null) {
-                // TODO: Integrate ExoPlayer here in next step
-                println("Video selected = $videoUri")
+                val mediaItem = MediaItem.fromUri(videoUri)
+                exoPlayer.setMediaItem(mediaItem)
+                exoPlayer.prepare()
+                exoPlayer.playWhenReady = true
             }
         }
     )
@@ -177,5 +192,6 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
+
 
 
