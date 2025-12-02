@@ -4,4 +4,5 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.compose.compiler) apply false
     id("org.jetbrains.kotlin.plugin.serialization") version "1.7.10" apply false
+    id("org.mozilla.rust-android-gradle.rust-android") version "0.9.6" apply false
 }
