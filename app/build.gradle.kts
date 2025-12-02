@@ -9,7 +9,7 @@ plugins {
 android {
     namespace = "io.github.swiftcut"
     compileSdk = 36
-    //ndkVersion = "29.0.13113456"
+    ndkVersion = "29.0.13113456"
 
     defaultConfig {
         applicationId = "io.github.swiftcut"
@@ -19,9 +19,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        /*ndk {
+        ndk {
             abiFilters += listOf("arm64-v8a")
-        }*/
+        }
 
         buildConfigField("String", "Version", "\"v${versionName}\"")
     }
@@ -86,13 +86,6 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-
-    /*externalNativeBuild {
-        cmake {
-            path = file("src/main/cpp/CMakeLists.txt")
-            version = "3.31.6"
-        }
-    }*/
 
     buildFeatures {
         viewBinding = true
