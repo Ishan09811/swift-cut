@@ -10,7 +10,7 @@ plugins {
 android {
     namespace = "io.github.swiftcut"
     compileSdk = 36
-    ndkVersion = "29.0.13113456"
+    ndkVersion = "29.0.14206865"
 
     defaultConfig {
         applicationId = "io.github.swiftcut"
