@@ -1,3 +1,6 @@
+
+mod core;
+
 use jni::objects::{JClass, JString};
 use jni::sys::{jint};
 use jni::JNIEnv;
@@ -27,7 +30,8 @@ pub extern "C" fn Java_io_github_swiftcut_NativeLib_extractThumbnails(
         return -3;
     }
 
-    // TODO: implement timeline extractor
-
-    0
+    match core::extract_thumbnails(&video_path, &out_dir, j_count as i32) {
+        Ok(_) => 0,
+        Err(_) => -4,
+    }
 }
