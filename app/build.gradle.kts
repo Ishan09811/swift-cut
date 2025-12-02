@@ -1,3 +1,18 @@
+import org.gradle.process.ExecOperations
+import javax.inject.Inject
+
+abstract class RustTooling @Inject constructor(
+    private val execOps: ExecOperations
+) {
+    fun installTarget(target: String) {
+        execOps.exec {
+            commandLine("rustup", "target", "add", target)
+        }
+    }
+}
+
+val rustTooling = objects.newInstance(RustTooling::class)
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -107,9 +122,7 @@ cargo {
 
 tasks.register("installRustTarget") {
     doLast {
-        exec {
-            commandLine("rustup", "target", "add", "aarch64-linux-android")
-        }
+        rustTooling.installTarget("aarch64-linux-android")
     }
 }
 
