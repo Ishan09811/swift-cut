@@ -4,9 +4,10 @@ import javax.inject.Inject
 abstract class RustTooling @Inject constructor(
     private val execOps: ExecOperations
 ) {
-    fun installTarget(target: String) {
+    fun setupEnv() {
         execOps.exec {
-            commandLine("rustup", "target", "add", target)
+            commandLine("rustup", "target", "add", "aarch64-linux-android")
+            environment("CFLAGS_aarch64-linux-android", "--target=aarch64-linux-android29 --sysroot=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/sysroot -fPIC")
         }
     }
 }
@@ -120,16 +121,16 @@ cargo {
     targets = listOf("arm64")
 }
 
-tasks.register("installRustTarget") {
+tasks.register("setupRustEnv") {
     doLast {
-        rustTooling.installTarget("aarch64-linux-android")
+        rustTooling.setupEnv()
     }
 }
 
 tasks.configureEach {
     if (name == "javaPreCompileDebug" || name == "javaPreCompileRelease") {
         dependsOn("cargoBuild")
-    } else if (name == "cargoBuildArm64") { dependsOn("installRustTarget") }
+    } else if (name == "cargoBuildArm64") { dependsOn("setupRustEnv") }
 }
 
 base.archivesName = "swiftCut"
