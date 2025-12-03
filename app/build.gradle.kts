@@ -7,7 +7,7 @@ abstract class RustTooling @Inject constructor(
     fun setupEnv() {
         execOps.exec {
             commandLine("rustup", "target", "add", "aarch64-linux-android")
-            environment("CFLAGS_aarch64-linux-android", "--target=aarch64-linux-android29 --sysroot=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/sysroot -fPIC")
+            environment("CFLAGS_aarch64-linux-android", "--target=aarch64-linux-android29 --sysroot=${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/sysroot -fPIC")
         }
     }
 }
