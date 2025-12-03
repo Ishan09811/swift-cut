@@ -7,7 +7,6 @@ abstract class RustTooling @Inject constructor(
     fun setupEnv() {
         execOps.exec {
             commandLine("rustup", "target", "add", "aarch64-linux-android")
-            environment("CFLAGS_aarch64-linux-android", "--target=aarch64-linux-android29 --sysroot=${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/sysroot -fPIC")
         }
     }
 }
@@ -130,7 +129,17 @@ tasks.register("setupRustEnv") {
 tasks.configureEach {
     if (name == "javaPreCompileDebug" || name == "javaPreCompileRelease") {
         dependsOn("cargoBuild")
-    } else if (name == "cargoBuildArm64") { dependsOn("setupRustEnv") }
+    } else if (name == "cargoBuildArm64") { 
+        dependsOn("setupRustEnv") 
+        doFirst {
+            environment("CC_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/aarch64-linux-android21-clang")
+            environment("CFLAGS_aarch64-linux-android", "--target=aarch64-linux-android21 --sysroot={System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/sysroot -fPIC")
+            environment("AR_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar")
+            environment("NM_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/llvm-nm")
+            environment("STRIP_aarch64-linux-android", "{System.getenv("ANDROID_NDK")}/llvm-strip")
+            environment("PKG_CONFIG_ALLOW_CROSS", "1")
+        }
+    }
 }
 
 base.archivesName = "swiftCut"
