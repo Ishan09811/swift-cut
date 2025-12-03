@@ -7,23 +7,6 @@ abstract class RustTooling @Inject constructor(
     fun cargoBuild() {
         execOps.exec {
             workingDir("src/main/backend")
-            environment["CC_aarch64-linux-android"] =
-                "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang"
-
-            environment["CXX_aarch64-linux-android"] =
-               "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang++"
-
-            environment["AR_aarch64-linux-android"] =
-               "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-ar"
-
-            environment["LD_aarch64-linux-android"] =
-               "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/ld.lld"
-
-            environment["CFLAGS_aarch64-linux-android"] =
-               "--target=aarch64-linux-android21 --sysroot=${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/sysroot -fPIC"
-
-            environment["PKG_CONFIG_ALLOW_CROSS"] = "1"
-
             commandLine(
                 "bash", "-c",
                 """
