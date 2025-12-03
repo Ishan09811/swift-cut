@@ -4,9 +4,20 @@ import javax.inject.Inject
 abstract class RustTooling @Inject constructor(
     private val execOps: ExecOperations
 ) {
-    fun setupEnv() {
+    fun installTarget() {
         execOps.exec {
             commandLine("rustup", "target", "add", "aarch64-linux-android")
+        }
+    }
+
+    fun setupEnv() {
+        execOps.exec {
+            environment("CC_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/aarch64-linux-android21-clang")
+            environment("CFLAGS_aarch64-linux-android", "--target=aarch64-linux-android21 --sysroot=${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/sysroot -fPIC")
+            environment("AR_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar")
+            environment("NM_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/llvm-nm")
+            environment("STRIP_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/llvm-strip")
+            environment("PKG_CONFIG_ALLOW_CROSS", "1")
         }
     }
 }
@@ -120,9 +131,9 @@ cargo {
     targets = listOf("arm64")
 }
 
-tasks.register("setupRustEnv") {
+tasks.register("installRustTarget") {
     doLast {
-        rustTooling.setupEnv()
+        rustTooling.installTarget()
     }
 }
 
@@ -130,14 +141,9 @@ tasks.configureEach {
     if (name == "javaPreCompileDebug" || name == "javaPreCompileRelease") {
         dependsOn("cargoBuild")
     } else if (name == "cargoBuildArm64") { 
-        dependsOn("setupRustEnv") 
+        dependsOn("installRustTarget") 
         doFirst {
-            environment("CC_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/aarch64-linux-android21-clang")
-            environment("CFLAGS_aarch64-linux-android", "--target=aarch64-linux-android21 --sysroot=${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/sysroot -fPIC")
-            environment("AR_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar")
-            environment("NM_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/llvm-nm")
-            environment("STRIP_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/llvm-strip")
-            environment("PKG_CONFIG_ALLOW_CROSS", "1")
+            rustTooling.setupEnv()
         }
     }
 }
