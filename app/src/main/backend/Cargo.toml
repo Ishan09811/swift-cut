@@ -10,4 +10,4 @@ crate-type = ["cdylib"]
 
 [dependencies]
 jni = "0.21"
-ffmpeg-next = { version = "8.0.0", features = ["build-without-configure"] }
+ffmpeg-next = { version = "8.0.0" }
