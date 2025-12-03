@@ -130,27 +130,22 @@ tasks.named("cargoBuildArm64").configure {
     dependsOn("installRustTarget")
 
     doFirst {
-        environment.put(
-            "CC_aarch64-linux-android",
-            "${System.getenv("ANDROID_NDK")}/aarch64-linux-android21-clang"
-        )
-        environment.put(
-            "CFLAGS_aarch64-linux-android",
+        environment["CC_aarch64-linux-android"] =
+            "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang"
+
+        environment["CFLAGS_aarch64-linux-android"] =
             "--target=aarch64-linux-android21 --sysroot=${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/sysroot -fPIC"
-        )
-        environment.put(
-            "AR_aarch64-linux-android",
+
+        environment["AR_aarch64-linux-android"] =
             "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar"
-        )
-        environment.put(
-            "NM_aarch64-linux-android",
-            "${System.getenv("ANDROID_NDK")}/llvm-nm"
-        )
-        environment.put(
-            "STRIP_aarch64-linux-android",
-            "${System.getenv("ANDROID_NDK")}/llvm-strip"
-        )
-        environment.put("PKG_CONFIG_ALLOW_CROSS", "1")
+
+        environment["NM_aarch64-linux-android"] =
+            "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm"
+
+        environment["STRIP_aarch64-linux-android"] =
+            "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip"
+
+        environment["PKG_CONFIG_ALLOW_CROSS"] = "1"
     }
 }
 
