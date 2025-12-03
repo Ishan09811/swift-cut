@@ -118,6 +118,11 @@ cargo {
     module  = "src/main/backend"
     libname = "swiftcut_backend"
     targets = listOf("arm64")
+    exec { spec, toolchain -> 
+        spec.environment("CC_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang")
+        spec.environment("CFLAGS_aarch64-linux-android", "--target=aarch64-linux-android21 --sysroot=${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/sysroot -fPIC")
+        spec.environment("PKG_CONFIG_ALLOW_CROSS", "1")
+    }
 }
 
 tasks.register("installRustTarget") {
@@ -128,25 +133,6 @@ tasks.register("installRustTarget") {
 
 tasks.named("cargoBuildArm64").configure {
     dependsOn("installRustTarget")
-
-    doFirst {
-        environment["CC_aarch64-linux-android"] =
-            "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang"
-
-        environment["CFLAGS_aarch64-linux-android"] =
-            "--target=aarch64-linux-android21 --sysroot=${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/sysroot -fPIC"
-
-        environment["AR_aarch64-linux-android"] =
-            "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android-ar"
-
-        environment["NM_aarch64-linux-android"] =
-            "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm"
-
-        environment["STRIP_aarch64-linux-android"] =
-            "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-strip"
-
-        environment["PKG_CONFIG_ALLOW_CROSS"] = "1"
-    }
 }
 
 tasks.configureEach {
