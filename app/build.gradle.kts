@@ -4,9 +4,18 @@ import javax.inject.Inject
 abstract class RustTooling @Inject constructor(
     private val execOps: ExecOperations
 ) {
-    fun installTarget() {
+    fun cargoBuild() {
         execOps.exec {
-            commandLine("rustup", "target", "add", "aarch64-linux-android")
+            workingDir("src/main/backend")
+
+            commandLine(
+                "bash", "-c",
+                """
+                rustup target add aarch64-linux-android && \
+                cargo binstall cargo-ndk -y && \
+                cargo ndk -t arm64-v8a -o ../jniLibs build --release
+                """.trimIndent()
+            )
         }
     }
 }
@@ -18,7 +27,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     id("org.jetbrains.kotlin.plugin.serialization")
-    id("org.mozilla.rust-android-gradle.rust-android")
     id("kotlin-parcelize")
 }
 
@@ -114,25 +122,10 @@ android {
     }
 }
 
-cargo {
-    module  = "src/main/backend"
-    libname = "swiftcut_backend"
-    targets = listOf("arm64")
-    exec {
-        environment("CC_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang")
-        environment("CFLAGS_aarch64-linux-android", "--target=aarch64-linux-android21 --sysroot=${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/sysroot -fPIC")
-        environment("PKG_CONFIG_ALLOW_CROSS", "1")
-    }
-}
-
-tasks.register("installRustTarget") {
+tasks.register("cargoBuild") {
     doLast {
-        rustTooling.installTarget()
+        rustTooling.cargoBuild()
     }
-}
-
-tasks.named("cargoBuildArm64").configure {
-    dependsOn("installRustTarget")
 }
 
 tasks.configureEach {
