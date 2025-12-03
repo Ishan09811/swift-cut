@@ -118,7 +118,7 @@ cargo {
     module  = "src/main/backend"
     libname = "swiftcut_backend"
     targets = listOf("arm64")
-    exec { spec, toolchain -> 
+    exec { spec: org.gradle.process.ExecSpec ->
         spec.environment("CC_aarch64-linux-android", "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang")
         spec.environment("CFLAGS_aarch64-linux-android", "--target=aarch64-linux-android21 --sysroot=${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/sysroot -fPIC")
         spec.environment("PKG_CONFIG_ALLOW_CROSS", "1")
