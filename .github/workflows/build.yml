@@ -47,7 +47,7 @@ jobs:
         KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
       run: |
         cat -A ${{ github.workspace }}/app/src/main/backend/.cargo/config.toml
-        sed -i 's/\r$//' ${{ github.workspace }}/app/src/main/backend/.cargo/config.toml
+        sed -i 's/\$$//' ${{ github.workspace }}/app/src/main/backend/.cargo/config.toml
         dos2unix ${{ github.workspace }}/app/src/main/backend/.cargo/config.toml 2>/dev/null || true
         chmod +x ./gradlew && ./gradlew assembleRelease
   
