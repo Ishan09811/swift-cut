@@ -46,9 +46,7 @@ jobs:
         KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
         KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
       run: |
-        cat -A ${{ github.workspace }}/app/src/main/backend/.cargo/config.toml
-        sed -i 's/\$$//' ${{ github.workspace }}/app/src/main/backend/.cargo/config.toml
-        dos2unix ${{ github.workspace }}/app/src/main/backend/.cargo/config.toml 2>/dev/null || true
+        export NM_aarch64_linux_android="$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm"
         chmod +x ./gradlew && ./gradlew assembleRelease
   
     - name: Upload build
