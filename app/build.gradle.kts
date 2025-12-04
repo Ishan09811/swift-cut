@@ -7,6 +7,7 @@ abstract class RustTooling @Inject constructor(
     fun cargoBuild() {
         execOps.exec {
             workingDir("src/main/backend")
+            environment("NM_aarch64_linux_android", "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm")
             commandLine(
                 "bash", "-c",
                 """
