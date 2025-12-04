@@ -7,7 +7,6 @@ abstract class RustTooling @Inject constructor(
     fun cargoBuild() {
         execOps.exec {
             workingDir("src/main/backend")
-            environment("NM_aarch64_linux_android", "${System.getenv("ANDROID_NDK")}/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm")
             commandLine(
                 "bash", "-c",
                 """
@@ -34,7 +33,7 @@ plugins {
 android {
     namespace = "io.github.swiftcut"
     compileSdk = 36
-    ndkVersion = "29.0.14206865"
+    ndkVersion = "27.3.13750724"
 
     defaultConfig {
         applicationId = "io.github.swiftcut"
