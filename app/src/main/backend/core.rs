@@ -16,8 +16,11 @@ pub fn extract_thumbnails(video: &str, out_dir: &str, count: i32) -> Result<(), 
 
     let video_stream_index = input_stream.index();
 
-    let mut decoder = input_stream.codec().decoder().video().map_err(|e| e.to_string())?;
-
+    let mut decoder = input_stream.parameters()
+        .decoder()
+        .video()
+        .map_err(|e| e.to_string())?;
+  
     let total_frames = input_stream.frames();
     let step = (total_frames / count as i64).max(1);
 
