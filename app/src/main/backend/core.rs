@@ -1,9 +1,10 @@
-use ffmpeg_next::{
+use ffmpeg_next as ffmpeg;
+use ffmpeg::{
     codec,
     codec::Context as CodecContext,
     format,
     media::Type,
-}; as ffmpeg;
+};
 use ffmpeg::format::input;
 use ffmpeg::software::scaling::{context::Context as Scaler, flag::Flags};
 use ffmpeg::util::frame::video::Video;
