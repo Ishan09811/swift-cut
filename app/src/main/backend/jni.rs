@@ -9,18 +9,18 @@ use std::path::Path;
 use std::fs;
 
 #[no_mangle]
-pub extern "C" fn Java_io_github_swiftcut_NativeLib_extractThumbnails(
+pub unsafe extern "C" fn Java_io_github_swiftcut_NativeLib_extractThumbnails(
     env: JNIEnv,
     _class: JClass,
     j_video_path: JString,
     j_out_dir: JString,
     j_count: jint,
 ) -> jint {
-    let video_path: String = match env.get_string(j_video_path) {
+    let video_path: String = match env.get_string(&j_video_path) {
         Ok(s) => s.into(),
         Err(_) => return -1,
     };
-    let out_dir: String = match env.get_string(j_out_dir) {
+    let out_dir: String = match env.get_string(&j_out_dir) {
         Ok(s) => s.into(),
         Err(_) => return -2,
     };
