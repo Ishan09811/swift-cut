@@ -4,12 +4,10 @@ mod core;
 use jni::objects::{JClass, JString};
 use jni::sys::{jint};
 use jni::JNIEnv;
-use std::ffi::CString;
-use std::path::Path;
 use std::fs;
 
-#[no_mangle]
-pub unsafe extern "C" fn Java_io_github_swiftcut_NativeLib_extractThumbnails(
+#[unsafe(no_mangle)]
+pub extern "C" fn Java_io_github_swiftcut_NativeLib_extractThumbnails(
     env: JNIEnv,
     _class: JClass,
     j_video_path: JString,
@@ -30,7 +28,7 @@ pub unsafe extern "C" fn Java_io_github_swiftcut_NativeLib_extractThumbnails(
         return -3;
     }
 
-    match core::extract_thumbnails(&video_path, &out_dir, j_count as i32) {
+    match core::extract_thumbnails(&video_path, &out_dir, &count) {
         Ok(_) => 0,
         Err(_) => -4,
     }
