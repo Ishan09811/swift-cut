@@ -16,9 +16,12 @@ pub fn extract_thumbnails(video: &str, out_dir: &str, count: i32) -> Result<(), 
 
     let video_stream_index = input_stream.index();
 
-    let mut decoder = input_stream.parameters()
-        .decoder()
-        .video()
+    let params = input_stream.parameters();
+    let codec = ffmpeg::codec::decoder::find(params.id())
+        .ok_or("Codec not found")?;
+
+    let mut decoder = codec
+        .open_as(params)
         .map_err(|e| e.to_string())?;
   
     let total_frames = input_stream.frames();
