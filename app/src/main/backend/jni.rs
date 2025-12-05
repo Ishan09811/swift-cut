@@ -28,7 +28,7 @@ pub extern "C" fn Java_io_github_swiftcut_NativeLib_extractThumbnails(
         return -3;
     }
 
-    match core::extract_thumbnails(&video_path, &out_dir, &count) {
+    match core::extract_thumbnails(&video_path, &out_dir, count) {
         Ok(_) => 0,
         Err(_) => -4,
     }
