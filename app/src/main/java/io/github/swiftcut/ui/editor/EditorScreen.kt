@@ -191,7 +191,9 @@ fun TimelineView(modifier: Modifier = Modifier, thumbDir: File) {
     }
 
     val bitmaps = produceState<List<Bitmap?>>(initialValue = emptyList(), thumbs) {
-        value = thumbs.map { PPMLoader.loadPPM(it) }
+        value = withContext(Dispatchers.IO) { 
+            thumbs.map { PPMLoader.loadPPM(it) }
+        }
     }
     
     LazyRow(
@@ -221,7 +223,3 @@ fun TimelineView(modifier: Modifier = Modifier, thumbDir: File) {
         }
     }
 }
-
-
-
-
