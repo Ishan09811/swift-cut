@@ -47,7 +47,7 @@ fun EditorScreen() {
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             scope.launch(Dispatchers.IO) {
-                val file = ProjectStorage.copyVideoToProject(context, uri!!, "project_1")
+                val file = ProjectStorage.importVideo(context, uri!!, "project_1")
                 withContext(Dispatchers.Main) {
                     importedVideoFile = file
                 }
@@ -192,9 +192,3 @@ fun TimelineView(modifier: Modifier = Modifier) {
         }
     }
 }
-
-
-
-
-
-
