@@ -11,44 +11,26 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
     ffmpeg::init().map_err(|e| e.to_string())?;
 
     let mut ictx = input(&video).map_err(|e| e.to_string())?;
+    let input_stream = ictx.streams().best(Type::Video).ok_or("No video stream")?;
 
-    let input_stream = ictx
-        .streams()
-        .best(Type::Video)
-        .ok_or("No video stream")?;
-
-    let video_stream_index = input_stream.index();
+    let idx = input_stream.index();
     let duration_us = input_stream.duration();
-    let duration_ms = duration_us as i64 / 1000;
 
-    let count = (duration_ms / 500).max(1) as i32;
+    let count = ((duration_us / 1000) / 500).max(1) as i32;
 
-    let params = input_stream.parameters().clone();
-    let codec_ctx = CodecContext::from_parameters(params)
-        .map_err(|e| e.to_string())?;
+    let codec_ctx = CodecContext::from_parameters(input_stream.parameters())?;
+    let mut decoder = codec_ctx.decoder().video().unwrap();
 
-    let mut decoder = codec_ctx.decoder().video().map_err(|e| e.to_string())?;
-
-    let mut scaler = Scaler::get(
-        decoder.format(),
-        decoder.width(),
-        decoder.height(),
-        ffmpeg::format::Pixel::RGB24,
-        160,
-        90,
-        Flags::FAST_BILINEAR,
-    )
-    .unwrap();
-
-    std::fs::create_dir_all(out_dir).map_err(|e| e.to_string())?;
+    std::fs::create_dir_all(out_dir).unwrap();
 
     for i in 0..count {
-        let ts = (duration_us as f64 * (i as f64 / count as f64)) as i64;
+        let ts = duration_us * i as i64 / count as i64;
         ictx.seek(ts, ..).map_err(|e| e.to_string())?;
-        let mut decoded = false;
-        
+        decoder.flush();
+
+        let mut got = false;
         for (stream, packet) in ictx.packets() {
-            if stream.index() != video_stream_index {
+            if stream.index() != idx {
                 continue;
             }
 
@@ -56,19 +38,29 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
 
             let mut frame = Video::empty();
             if decoder.receive_frame(&mut frame).is_ok() {
-                let mut rgb_frame = Video::empty();
-                scaler.run(&frame, &mut rgb_frame).unwrap();
+                let mut rgb = Video::empty();
+                let mut scaler = Scaler::get(
+                    decoder.format(),
+                    decoder.width(),
+                    decoder.height(),
+                    ffmpeg::format::Pixel::RGB24,
+                    160,
+                    90,
+                    Flags::FAST_BILINEAR,
+                ).unwrap();
+
+                scaler.run(&frame, &mut rgb).unwrap();
 
                 let out = format!("{}/thumb_{}.ppm", out_dir, i);
-                save_ppm(&rgb_frame, &out)?;
+                save_ppm(&rgb, &out)?;
 
-                decoded = true;
+                got = true;
                 break;
             }
         }
 
-        if !decoded {
-            return Err("Failed to decode frame".into());
+        if !got {
+            return Err(format!("Failed to decode at index {}", i));
         }
     }
 
