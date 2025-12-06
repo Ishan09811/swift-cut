@@ -56,4 +56,11 @@ object ProjectStorage {
 
         return name
     }
+
+    fun File?.nameWithoutExtension(): String {
+        if (this == null) return "imported_video"
+        val name = this.name
+        val lastDot = name.lastIndexOf('.')
+        return if (lastDot != -1) name.substring(0, lastDot) else name
+    }
 }
