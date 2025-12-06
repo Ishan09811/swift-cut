@@ -37,4 +37,8 @@ object ProjectStorage {
             null
         }
     }
+
+    fun getThumbDir(context: Context, projectName: String = "project_1"): File {
+        return File(context.filesDir, "projects/${projectName}/thumbnails")
+    }
 }
