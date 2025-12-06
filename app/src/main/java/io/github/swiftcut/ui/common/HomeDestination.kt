@@ -90,7 +90,7 @@ fun HomeDestination(navController: NavController) {
                             if (name.isNotEmpty()) {
                                 scope.launch {
                                     val updated = projects + Project(name)
-                                    saveProjects(context, updated)
+                                    //saveProjects(context, updated)
                                     projects = updated
                                     newProjectName = TextFieldValue("")
                                     showDialog = false
