@@ -28,7 +28,7 @@ object ProjectStorage {
                 }
             }
 
-            if (destFile != null) {
+            if (destFile != null && !File(projectDir, "thumbnails/${fileName.substring(0, fileName.lastIndexOf('.'))}").exists()) {
                 val result = NativeLib.extractThumbnails(destFile.absolutePath, projectDir.absolutePath + "/thumbnails/${fileName.substring(0, fileName.lastIndexOf('.'))}")
             }
 
