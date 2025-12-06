@@ -9,6 +9,7 @@ import java.io.FileOutputStream
 import java.io.InputStream
 
 object ProjectStorage {
+    
     fun importVideo(
         context: Context,
         sourceUri: Uri,
@@ -18,7 +19,7 @@ object ProjectStorage {
             val projectDir = File(context.filesDir, "projects/$projectName")
             if (!projectDir.exists()) projectDir.mkdirs()
 
-            val fileName = "imported_video.mp4"
+            val fileName = getFileNameFromUri(context, sourceUri)
             val destFile = File(projectDir, fileName)
 
             context.contentResolver.openInputStream(sourceUri)?.use { input ->
@@ -28,7 +29,7 @@ object ProjectStorage {
             }
 
             if (destFile != null) {
-                val result = NativeLib.extractThumbnails(destFile.absolutePath, projectDir.absolutePath + "/thumbnails")
+                val result = NativeLib.extractThumbnails(destFile.absolutePath, projectDir.absolutePath + "/thumbnails/${fileName.substring(0, fileName.lastIndexOf('.'))}")
             }
 
             destFile
@@ -38,7 +39,21 @@ object ProjectStorage {
         }
     }
 
-    fun getThumbDir(context: Context, projectName: String = "project_1"): File {
-        return File(context.filesDir, "projects/${projectName}/thumbnails")
+    fun getThumbDir(context: Context, videoName: String, projectName: String = "project_1"): File {
+        return File(context.filesDir, "projects/${projectName}/thumbnails/$videoName")
+    }
+
+    fun getFileNameFromUri(context: Context, uri: Uri): String {
+        var name = "imported_video.mp4"
+
+        val cursor = context.contentResolver.query(uri, null, null, null, null)
+        cursor?.use {
+            val nameIndex = it.getColumnIndexOpenable(android.provider.OpenableColumns.DISPLAY_NAME)
+            if (it.moveToFirst() && nameIndex != -1) {
+                name = it.getString(nameIndex)
+            }
+        }
+
+        return name
     }
 }
