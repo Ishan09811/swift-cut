@@ -1,6 +1,7 @@
 package io.github.swiftcut.utils
 
 import android.graphics.Bitmap
+import android.graphics.Color
 import java.io.File
 import java.io.FileInputStream
 
