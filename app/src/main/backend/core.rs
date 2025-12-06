@@ -21,17 +21,12 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
     let duration_ms = duration_us as i64 / 1000;
 
     let count = (duration_ms / 500).max(1) as i32;
-    
-    let video_stream_index = input_stream.index();
 
     let params = input_stream.parameters();
     let codec_ctx = CodecContext::from_parameters(params)
         .map_err(|e| e.to_string())?;
 
     let mut decoder = codec_ctx.decoder().video().map_err(|e| e.to_string())?;
-  
-    let total_frames = input_stream.frames();
-    let step = (total_frames / count as i64).max(1);
 
     let mut scaler = Scaler::get(
         decoder.format(),
@@ -44,8 +39,7 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
     )
     .unwrap();
 
-    let mut frame_index = 0;
-    let mut extracted = 0;
+    std::fs::create_dir_all(out_dir).map_err(|e| e.to_string())?;
 
     for i in 0..count {
         let ts = (duration_us as f64 * (i as f64 / count as f64)) as i64;
