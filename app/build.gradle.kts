@@ -13,7 +13,7 @@ abstract class RustTooling @Inject constructor(
                 rustup target add aarch64-linux-android && \
                 cargo install cargo-binstall && \
                 cargo binstall cargo-ndk -y && \
-                cargo ndk -t arm64-v8a -o ../jniLibs/arm64-v8a build --release
+                cargo ndk -t arm64-v8a -o ../jniLibs build --release
                 """.trimIndent()
             )
         }
