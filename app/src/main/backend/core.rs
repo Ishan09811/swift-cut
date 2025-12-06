@@ -24,7 +24,7 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
     std::fs::create_dir_all(out_dir).unwrap();
 
     for i in 0..count {
-        let ts = duration_us * i as i64 / count as i64;
+        let ts = duration_us * (i + 1) / (count + 1);
         ictx.seek(ts, ..).map_err(|e| e.to_string())?;
         decoder.flush();
 
