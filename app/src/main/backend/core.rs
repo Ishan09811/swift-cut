@@ -47,29 +47,33 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
     let mut frame_index = 0;
     let mut extracted = 0;
 
-    for (stream, packet) in ictx.packets() {
-        if stream.index() != video_stream_index {
-            continue;
-        }
+    for i in 0..count {
+        let ts = (duration_us as f64 * (i as f64 / count as f64)) as i64;
+        ictx.seek(ts, ..).map_err(|e| e.to_string())?;
+        let mut decoded = false;
+        
+        for (stream, packet) in ictx.packets() {
+            if stream.index() != input_stream.index() {
+                continue;
+            }
 
-        decoder.send_packet(&packet).unwrap();
+            decoder.send_packet(&packet).unwrap();
 
-        let mut frame = Video::empty();
-        while decoder.receive_frame(&mut frame).is_ok() {
-            if frame_index % step == 0 {
+            let mut frame = Video::empty();
+            if decoder.receive_frame(&mut frame).is_ok() {
                 let mut rgb_frame = Video::empty();
                 scaler.run(&frame, &mut rgb_frame).unwrap();
 
-                let out = format!("{}/thumb_{}.ppm", out_dir, extracted);
+                let out = format!("{}/thumb_{}.ppm", out_dir, i);
                 save_ppm(&rgb_frame, &out)?;
 
-                extracted += 1;
-                if extracted >= count {
-                    return Ok(());
-                }
+                decoded = true;
+                break;
             }
+        }
 
-            frame_index += 1;
+        if !decoded {
+            return Err("Failed to decode frame".into());
         }
     }
 
