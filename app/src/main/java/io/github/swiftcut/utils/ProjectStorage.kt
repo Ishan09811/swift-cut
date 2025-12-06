@@ -29,6 +29,7 @@ object ProjectStorage {
 
             if (destFile != null) {
                 NativeLib.extractThumbnails(destFile.absolutePath, projectDir.absolutePath + "/thumbnails")
+            }
 
             destFile
         } catch (e: Exception) {
