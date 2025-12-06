@@ -6,8 +6,8 @@ import java.io.FileInputStream
 
 object PPMLoader {
 
-    fun loadPPM(path: String): Bitmap? {
-        val file = File(path)
+    fun loadPPM(file: File?): Bitmap? {
+        if (file == null) return null
         val bytes = file.readBytes()
         var index = 0
 
