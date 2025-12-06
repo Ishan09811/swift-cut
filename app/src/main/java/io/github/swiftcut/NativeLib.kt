@@ -5,5 +5,5 @@ object NativeLib {
         System.loadLibrary("swiftcut_backend")
     }
 
-    external fun extractThumbnails(videoPath: String, outDir: String, count: Int): Int
+    external fun extractThumbnails(videoPath: String, outDir: String): Int
 }
