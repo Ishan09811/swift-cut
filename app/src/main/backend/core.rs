@@ -7,7 +7,7 @@ use ffmpeg::format::input;
 use ffmpeg::software::scaling::{context::Context as Scaler, flag::Flags};
 use ffmpeg::util::frame::video::Video;
 
-pub fn extract_thumbnails(video: &str, out_dir: &str, count: i32) -> Result<(), String> {
+pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
     ffmpeg::init().map_err(|e| e.to_string())?;
 
     let mut ictx = input(&video).map_err(|e| e.to_string())?;
@@ -17,6 +17,11 @@ pub fn extract_thumbnails(video: &str, out_dir: &str, count: i32) -> Result<(), 
         .best(Type::Video)
         .ok_or("No video stream")?;
 
+    let duration_us = input_stream.duration();
+    let duration_ms = duration_us as i64 / 1000;
+
+    let count = (duration_ms / 500).max(1) as i32;
+    
     let video_stream_index = input_stream.index();
 
     let params = input_stream.parameters();
