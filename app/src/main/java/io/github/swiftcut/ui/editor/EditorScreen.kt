@@ -35,6 +35,7 @@ import androidx.media3.common.MediaItem
 import io.github.swiftcut.R
 import io.github.swiftcut.utils.PPMLoader
 import io.github.swiftcut.utils.ProjectStorage
+import io.github.swiftcut.utils.ProjectStorage.nameWithoutExtension 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -85,7 +86,7 @@ fun EditorScreen() {
                         .height(140.dp)
                         .fillMaxWidth()
                         .background(Color(0xFF121212)),
-                    thumbDir = ProjectStorage.getThumbDir(context)
+                    thumbDir = ProjectStorage.getThumbDir(context, importedVideoFile.nameWithoutExtension())
                 )
             }
         }
@@ -220,5 +221,6 @@ fun TimelineView(modifier: Modifier = Modifier, thumbDir: File?) {
         }
     }
 }
+
 
 
