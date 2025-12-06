@@ -17,12 +17,13 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
         .best(Type::Video)
         .ok_or("No video stream")?;
 
+    let video_stream_index = input_stream.index();
     let duration_us = input_stream.duration();
     let duration_ms = duration_us as i64 / 1000;
 
     let count = (duration_ms / 500).max(1) as i32;
 
-    let params = input_stream.parameters();
+    let params = input_stream.parameters().clone();
     let codec_ctx = CodecContext::from_parameters(params)
         .map_err(|e| e.to_string())?;
 
@@ -47,7 +48,7 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
         let mut decoded = false;
         
         for (stream, packet) in ictx.packets() {
-            if stream.index() != input_stream.index() {
+            if stream.index() != video_stream_index {
                 continue;
             }
 
