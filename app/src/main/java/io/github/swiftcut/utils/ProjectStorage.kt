@@ -46,11 +46,18 @@ object ProjectStorage {
     fun getFileNameFromUri(context: Context, uri: Uri): String {
         var name = "imported_video.mp4"
 
-        val cursor = context.contentResolver.query(uri, null, null, null, null)
+        val cursor = context.contentResolver.query(
+            uri,
+            arrayOf(android.provider.OpenableColumns.DISPLAY_NAME),
+            null, null, null
+        )
+
         cursor?.use {
-            val nameIndex = it.getColumnIndexOpenable(android.provider.OpenableColumns.DISPLAY_NAME)
-            if (it.moveToFirst() && nameIndex != -1) {
-                name = it.getString(nameIndex)
+            if (it.moveToFirst()) {
+                val index = it.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME)
+                if (index >= 0) {
+                    name = it.getString(index)
+                }
             }
         }
 
