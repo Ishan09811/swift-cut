@@ -8,7 +8,7 @@ use std::fs;
 
 #[unsafe(no_mangle)]
 pub extern "C" fn Java_io_github_swiftcut_NativeLib_extractThumbnails(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _class: JClass,
     j_video_path: JString,
     j_out_dir: JString,
