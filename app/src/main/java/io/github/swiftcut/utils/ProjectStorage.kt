@@ -3,12 +3,13 @@ package io.github.swiftcut.utils
 
 import android.content.Context
 import android.net.Uri
+import io.github.swiftcut.NativeLib
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 
 object ProjectStorage {
-    fun copyVideoToProject(
+    fun importVideo(
         context: Context,
         sourceUri: Uri,
         projectName: String = "project_1"
@@ -25,6 +26,9 @@ object ProjectStorage {
                     input.copyTo(output)
                 }
             }
+
+            if (destFile != null) {
+                NativeLib.extractThumbnails(destFile.absolutePath, projectDir.absolutePath + "/thumbnails")
 
             destFile
         } catch (e: Exception) {
