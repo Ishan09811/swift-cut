@@ -2,6 +2,7 @@ package io.github.swiftcut.ui.editor
 
 import android.net.Uri
 import android.view.TextureView
+import android.graphics.Bitmap
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -30,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.common.MediaItem
 import io.github.swiftcut.R
+import io.github.swiftcut.utils.PPMLoader
 import io.github.swiftcut.utils.ProjectStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -80,7 +82,8 @@ fun EditorScreen() {
                     modifier = Modifier
                         .height(140.dp)
                         .fillMaxWidth()
-                        .background(Color(0xFF121212))
+                        .background(Color(0xFF121212)),
+                    thumbDir = ProjectStorage.getThumbDir(context)
                 )
             }
         }
@@ -115,20 +118,20 @@ fun VideoPreview(
             exoPlayer.release()
         }
     }
+
+    LaunchedEffect(videoUri) {
+        if (videoUri != null) {
+            exoPlayer.setMediaItem(MediaItem.fromUri(videoUri))
+            exoPlayer.prepare()
+            exoPlayer.playWhenReady = true
+        }
+    }
     
     AndroidView(
         modifier = modifier,
         factory = { context ->
             TextureView(context).apply {
                 exoPlayer.setVideoTextureView(this)
-            }
-        },
-        update = {
-            if (videoUri != null && videoUri != Uri.EMPTY) {
-                val mediaItem = MediaItem.fromUri(videoUri)
-                exoPlayer.setMediaItem(mediaItem)
-                exoPlayer.prepare()
-                exoPlayer.playWhenReady = true
             }
         }
     )
@@ -176,19 +179,43 @@ fun ToolPanel(
 }
 
 @Composable
-fun TimelineView(modifier: Modifier = Modifier) {
+fun TimelineView(modifier: Modifier = Modifier, thumbDir: File?) {
+    val thumbs = remember(thumbDir) {
+        if (thumbDir == null) emptyList()
+        else {
+            thumbDir.listFiles { f -> f.extension == "ppm" }?.sortedBy { it.name } ?: emptyList()
+        }
+    }
+
+    val bitmaps = produceState<List<Bitmap?>>(initialValue = emptyList(), thumbs) {
+        value = thumbs.map { PPMLoader.loadPPM(it) }
+    }
+    
     LazyRow(
         modifier = modifier.padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        items(20) {
-            Box(
-                modifier = Modifier
-                    .width(80.dp)
-                    .height(60.dp)
-                    .padding(end = 4.dp)
-                    .background(Color.Gray, shape = RoundedCornerShape(6.dp))
-            )
+        items(bitmaps.value) { bmp ->
+            if (bmp != null) {
+                Image(
+                    bitmap = bmp.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(60.dp)
+                        .padding(end = 4.dp)
+                        .background(Color.DarkGray, RoundedCornerShape(6.dp))
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(60.dp)
+                        .padding(end = 4.dp)
+                        .background(Color.Gray, RoundedCornerShape(6.dp))
+                )
+            }
         }
     }
 }
+
