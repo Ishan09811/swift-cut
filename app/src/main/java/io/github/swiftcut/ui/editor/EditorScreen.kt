@@ -182,9 +182,9 @@ fun ToolPanel(
 }
 
 @Composable
-fun TimelineView(modifier: Modifier = Modifier, thumbDir: File?) {
+fun TimelineView(modifier: Modifier = Modifier, thumbDir: File) {
     val thumbs = remember(thumbDir) {
-        if (thumbDir == null) emptyList()
+        if (!thumbDir.exists()) emptyList()
         else {
             thumbDir.listFiles { f -> f.extension == "ppm" }?.sortedBy { it.name } ?: emptyList()
         }
@@ -221,6 +221,7 @@ fun TimelineView(modifier: Modifier = Modifier, thumbDir: File?) {
         }
     }
 }
+
 
 
 
