@@ -35,7 +35,7 @@ jobs:
           ~/.cargo/registry
           ~/.cargo/git
           app/src/main/backend/target/aarch64-linux-android
-        key: ${{ runner.os }}-rust-${{ hashFiles('app/src/main/backend/Cargo.lock') }}-arm64
+        key: ${{ runner.os }}-rust-${{ hashFiles('app/src/main/backend/Cargo.toml') }}-arm64
         restore-keys: |
           ${{ runner.os }}-rust-
             
