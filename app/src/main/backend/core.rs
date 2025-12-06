@@ -1,14 +1,11 @@
 use ffmpeg_next as ffmpeg;
 use ffmpeg::{
-    codec,
     codec::Context as CodecContext,
-    format,
     media::Type,
 };
 use ffmpeg::format::input;
 use ffmpeg::software::scaling::{context::Context as Scaler, flag::Flags};
 use ffmpeg::util::frame::video::Video;
-use std::path::Path;
 
 pub fn extract_thumbnails(video: &str, out_dir: &str, count: i32) -> Result<(), String> {
     ffmpeg::init().map_err(|e| e.to_string())?;
@@ -26,7 +23,7 @@ pub fn extract_thumbnails(video: &str, out_dir: &str, count: i32) -> Result<(), 
     let mut codec_ctx = CodecContext::from_parameters(params)
         .map_err(|e| e.to_string())?;
 
-    let decoder = codec_ctx.decoder().video()?;
+    let decoder = codec_ctx.decoder().video().map_err(|e| e.to_string())?;
   
     let total_frames = input_stream.frames();
     let step = (total_frames / count as i64).max(1);
