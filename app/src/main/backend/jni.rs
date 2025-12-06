@@ -12,7 +12,6 @@ pub extern "C" fn Java_io_github_swiftcut_NativeLib_extractThumbnails(
     _class: JClass,
     j_video_path: JString,
     j_out_dir: JString,
-    j_count: jint,
 ) -> jint {
     let video_path: String = match env.get_string(&j_video_path) {
         Ok(s) => s.into(),
@@ -22,13 +21,12 @@ pub extern "C" fn Java_io_github_swiftcut_NativeLib_extractThumbnails(
         Ok(s) => s.into(),
         Err(_) => return -2,
     };
-    let count: i32 = j_count as i32;
 
     if let Err(_) = fs::create_dir_all(&out_dir) {
         return -3;
     }
 
-    match core::extract_thumbnails(&video_path, &out_dir, count) {
+    match core::extract_thumbnails(&video_path, &out_dir) {
         Ok(_) => 0,
         Err(_) => -4,
     }
