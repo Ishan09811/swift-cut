@@ -13,7 +13,7 @@ abstract class RustTooling @Inject constructor(
                 rustup target add aarch64-linux-android && \
                 cargo install cargo-binstall && \
                 cargo binstall cargo-ndk -y && \
-                cargo ndk -t arm64-v8a -o ../jniLibs build --release
+                cargo ndk -t arm64-v8a -o ../jniLibs/arm64-v8a build --release
                 """.trimIndent()
             )
         }
@@ -129,7 +129,7 @@ tasks.register("cargoBuild") {
 }
 
 tasks.configureEach {
-    if (name == "javaPreCompileDebug" || name == "javaPreCompileRelease") {
+    if (name == "javaPreCompileDebug" || name == "javaPreCompileRelease" || name == "mergeReleaseJniLibFolders" || name == "mergeReleaseNativeLibs" || name == "mergeDebugJniLibFolders" || name == "mergeDebugNativeLibs") {
         dependsOn("cargoBuild")
     }
 }
