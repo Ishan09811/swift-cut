@@ -6,36 +6,48 @@ import java.io.FileInputStream
 
 object PPMLoader {
 
-    fun loadPPM(file: File): Bitmap? {
-        val input = FileInputStream(file)
+    fun loadPPM(path: String): Bitmap? {
+        val file = File(path)
+        val bytes = file.readBytes()
+        var index = 0
 
-        val header = input.bufferedReader().readLine()
-        if (header != "P6") return null
+        fun readLine(): String {
+            val sb = StringBuilder()
+            while (index < bytes.size && bytes[index] != '\n'.code.toByte()) {
+                sb.append(bytes[index].toInt().toChar())
+                index++
+            }
+            index++
+            return sb.toString()
+        }
 
-        var sizeLine = input.bufferedReader().readLine()
-        while (sizeLine.startsWith("#"))
-            sizeLine = input.bufferedReader().readLine()
+        val magic = readLine().trim()
+        if (magic != "P6") return null
 
-        val (width, height) = sizeLine.split(" ").map { it.toInt() }
+        var dims = readLine()
+        while (dims.startsWith("#")) dims = readLine()
 
-        val maxVal = input.bufferedReader().readLine().toInt()
-        if (maxVal != 255) return null
+        val (w, h) = dims.trim().split(" ").map { it.toInt() }
 
-        val pixelData = input.readBytes()
-        input.close()
+        val maxVal = readLine().trim().toInt()
 
-        val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val pixelCount = w * h * 3
+        val pixelStart = index
 
-        var idx = 0
-        for (y in 0 until height) {
-            for (x in 0 until width) {
-                val r = pixelData[idx].toInt() and 0xFF
-                val g = pixelData[idx + 1].toInt() and 0xFF
-                val b = pixelData[idx + 2].toInt() and 0xFF
-                bmp.setPixel(x, y, (0xFF shl 24) or (r shl 16) or (g shl 8) or b)
-                idx += 3
+        val pixelBytes = bytes.copyOfRange(pixelStart, pixelStart + pixelCount)
+
+        val bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+
+        var p = 0
+        for (y in 0 until h) {
+            for (x in 0 until w) {
+                val r = pixelBytes[p++].toInt() and 0xFF
+                val g = pixelBytes[p++].toInt() and 0xFF
+                val b = pixelBytes[p++].toInt() and 0xFF
+                bitmap.setPixel(x, y, Color.rgb(r, g, b))
             }
         }
-        return bmp
+
+        return bitmap
     }
 }
