@@ -28,7 +28,7 @@ object ProjectStorage {
             }
 
             if (destFile != null) {
-                NativeLib.extractThumbnails(destFile.absolutePath, projectDir.absolutePath + "/thumbnails")
+                val result = NativeLib.extractThumbnails(destFile.absolutePath, projectDir.absolutePath + "/thumbnails")
             }
 
             destFile
