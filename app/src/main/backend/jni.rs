@@ -48,31 +48,3 @@ pub extern "C" fn Java_io_github_swiftcut_NativeLib_extractThumbnails(
         Err(_) => -4,
     }
 }
-
-#[no_mangle]
-pub extern "C" fn Java_io_github_swiftcut_NativeLib_saveProjects(
-    env: JNIEnv,
-    _class: JClass,
-    jJson: JString,
-) -> jint {
-    let jsonString: String = match env.get_string(jJson) {
-        Ok(s) => s.into(),
-        Err(_) => return -1,
-    };
-
-    match core::saveProjects(&jsonString) {
-        Ok(_) => 0,
-        Err(_) => -2,
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn Java_io_github_swiftcut_NativeLib_loadProjects(
-    env: JNIEnv,
-    _class: JClass,
-) -> JString {
-    match core::loadProjects() {
-        Ok(json) => env.new_string(json).unwrap(),
-        Err(_) => env.new_string("[]").unwrap(),
-    }
-}
