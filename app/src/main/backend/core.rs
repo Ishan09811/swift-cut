@@ -1,5 +1,7 @@
 
 mod project_util
+    
+use project_util::Project;
 
 use ffmpeg_next as ffmpeg;
 use ffmpeg::{
@@ -27,13 +29,17 @@ pub fn getRootPath() -> Result<&'static str, String> {
 }
 
 pub fn saveProjects(projects: &Vec<Project>) -> Result<(), String> { 
-    project_util::saveProjects(projects);
+    let root = get_root_path()?;
+    let filePath = format!("{}/projects.json", root);
+
+    project_util::saveProjects(&filePath, projects)
 }
 
 pub fn loadProjects() -> Result<Vec<Project>, String> {
-    let root = getRootPath()?; 
-    let filePath = format!("{}/{}", root, "projects.json");
-    project_util::loadProjects(filePath);
+    let root = get_root_path()?;
+    let filePath = format!("{}/projects.json", root);
+
+    project_util::loadProjects(&filePath)
 }
 
 pub fn extractThumbnails(video: &str, out_dir: &str) -> Result<(), String> {
