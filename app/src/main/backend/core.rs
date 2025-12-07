@@ -22,8 +22,8 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
         decoder.width(),
         decoder.height(),
         ffmpeg::format::Pixel::RGB24,
-        200,
-        112,
+        160,
+        90,
         Flags::FAST_BILINEAR,
     ).unwrap();
 
@@ -34,23 +34,20 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
             continue;
         }
 
-        let is_key = packet.is_key();
+        if !packet.is_key() {
+            continue;
+        }
         
         decoder.send_packet(&packet).unwrap();
 
-        loop {
-            let mut frame = Video::empty();
-            if decoder.receive_frame(&mut frame).is_err() {
-                break;
-            }
-            if is_key {
-                let mut rgb = Video::empty();
-                scaler.run(&frame, &mut rgb).unwrap();
+        let mut frame = Video::empty();
+        if decoder.receive_frame(&mut frame).is_ok() {
+            let mut rgb = Video::empty();
+            scaler.run(&frame, &mut rgb).unwrap();
 
-                let out = format!("{}/thumb_{}.ppm", out_dir, keyframe_count);
-                save_ppm(&rgb, &out)?;
-                keyframe_count += 1;
-            }
+            let out = format!("{}/thumb_{}.ppm", out_dir, keyframe_count);
+            save_ppm(&rgb, &out)?;
+            keyframe_count += 1;
         }
     }
 
