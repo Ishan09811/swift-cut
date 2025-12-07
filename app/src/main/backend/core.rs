@@ -1,6 +1,3 @@
-
-mod project_util
-    
 use ffmpeg_next as ffmpeg;
 use ffmpeg::{
     codec::Context as CodecContext,
@@ -24,20 +21,6 @@ pub fn getRootPath() -> Result<&'static str, String> {
         .get()
         .map(|s| s.as_str())
         .ok_or_else(|| "Root path not initialized".to_string())
-}
-
-pub fn saveProjects(json: &str) -> Result<(), String> { 
-    let root = getRootPath()?;
-    let filePath = format!("{}/projects.json", root);
-
-    project_util::saveProjects(&filePath, projects)
-}
-
-pub fn loadProjects() -> Result<String, String> {
-    let root = getRootPath()?;
-    let filePath = format!("{}/projects.json", root);
-
-    project_util::loadProjects(&filePath)
 }
 
 pub fn extractThumbnails(video: &str, out_dir: &str) -> Result<(), String> {
