@@ -3,6 +3,7 @@ package io.github.swiftcut
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import io.github.swiftcut.services.LoggerService
 
 class PandroidApplication : Application() {
     override fun onCreate() {
