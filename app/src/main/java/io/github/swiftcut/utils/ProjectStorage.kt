@@ -4,11 +4,26 @@ package io.github.swiftcut.utils
 import android.content.Context
 import android.net.Uri
 import io.github.swiftcut.NativeLib
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 
+@Serializable
+data class Project(
+    val name: String
+)
+
 object ProjectStorage {
+    
+    private val json = Json {
+        prettyPrint = false
+        ignoreUnknownKeys = true
+        encodeDefaults = true
+    }
     
     fun importVideo(
         context: Context,
@@ -63,6 +78,32 @@ object ProjectStorage {
         }
 
         return name
+    }
+
+    private fun projectsFile(context: Context): File {
+        return File(context.filesDir, "projects.json")
+    }
+
+    fun loadProjects(context: Context): List<Project> {
+        return try {
+            val file = projectsFile(context)
+            if (!file.exists()) return emptyList()
+
+            val content = file.readText()
+            json.decodeFromString(content)
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+
+    fun saveProjects(context: Context, projects: List<Project>) {
+        try {
+            val file = projectsFile(context)
+            val content = json.encodeToString(projects)
+            file.writeText(content)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun File?.nameWithoutExtension(): String {
