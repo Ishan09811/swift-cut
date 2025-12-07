@@ -21,8 +21,6 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
     let codec_ctx = CodecContext::from_parameters(input_stream.parameters()).map_err(|e| e.to_string())?;
     let mut decoder = codec_ctx.decoder().video().unwrap();
 
-    std::fs::create_dir_all(out_dir).unwrap();
-
     for i in 0..count {
         let ts = duration_us * i as i64 / count as i64;
         ictx.seek(ts, ..).map_err(|e| e.to_string())?;
