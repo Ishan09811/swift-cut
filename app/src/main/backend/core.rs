@@ -42,7 +42,7 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
             let mut frame = Video::empty();
             if decoder.receive_frame(&mut frame).is_ok() {
                 if let Some(pts) = frame.pts() {
-                    let frame_ts = tb.calculate(pts);
+                    let frame_ts = pts;
                     if frame_ts >= target_ts {
                         let mut rgb = Video::empty();
                         let mut scaler = Scaler::get(
