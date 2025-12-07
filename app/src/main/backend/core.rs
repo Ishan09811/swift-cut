@@ -1,8 +1,6 @@
 
 mod project_util
     
-use project_util::Project;
-
 use ffmpeg_next as ffmpeg;
 use ffmpeg::{
     codec::Context as CodecContext,
@@ -28,14 +26,14 @@ pub fn getRootPath() -> Result<&'static str, String> {
         .ok_or_else(|| "Root path not initialized".to_string())
 }
 
-pub fn saveProjects(projects: &Vec<Project>) -> Result<(), String> { 
+pub fn saveProjects(json: &str) -> Result<(), String> { 
     let root = getRootPath()?;
     let filePath = format!("{}/projects.json", root);
 
     project_util::saveProjects(&filePath, projects)
 }
 
-pub fn loadProjects() -> Result<Vec<Project>, String> {
+pub fn loadProjects() -> Result<String, String> {
     let root = getRootPath()?;
     let filePath = format!("{}/projects.json", root);
 
