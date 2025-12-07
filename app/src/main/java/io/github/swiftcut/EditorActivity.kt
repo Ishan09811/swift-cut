@@ -42,5 +42,12 @@ class EditorActivity : ComponentActivity() {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) enableFullScreenImmersive()
     }
-}
 
+    companion object {
+        fun start(context: Context, projectName: String) {
+            val intent = Intent(context, EditorActivity::class.java)
+            intent.putExtra("project_name", projectName)
+            context.startActivity(intent)
+        }
+    }
+}
