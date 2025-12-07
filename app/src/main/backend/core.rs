@@ -27,11 +27,11 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
     ffmpeg::init().map_err(|e| e.to_string())?;
 
     let mut ictx = input(&video).map_err(|e| e.to_string())?;
-    let input_stream = ictx.streams().best(Type::Video).ok_or("No video stream")?;
-    let idx = input_stream.index();
+    let inputStream = ictx.streams().best(Type::Video).ok_or("No video stream")?;
+    let idx = inputStream.index();
 
-    let codec_ctx = CodecContext::from_parameters(input_stream.parameters()).map_err(|e| e.to_string())?;
-    let mut decoder = codec_ctx.decoder().video().unwrap();
+    let codecCtx = CodecContext::from_parameters(inputStream.parameters()).map_err(|e| e.to_string())?;
+    let mut decoder = codecCtx.decoder().video().unwrap();
 
     let mut scaler = Scaler::get(
         decoder.format(),
@@ -43,7 +43,7 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
         Flags::FAST_BILINEAR,
     ).unwrap();
 
-    let mut keyframe_count = 0;
+    let mut keyframeCount = 0;
 
     for (stream, packet) in ictx.packets() {
         if stream.index() != idx {
@@ -63,7 +63,7 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
 
             let out = format!("{}/thumb_{}.ppm", out_dir, keyframe_count);
             save_ppm(&rgb, &out)?;
-            keyframe_count += 1;
+            keyframeCount += 1;
         }
     }
 
