@@ -52,7 +52,7 @@ fun EditorScreen() {
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             scope.launch(Dispatchers.IO) {
-                val file = ProjectStorage.importVideo(context, uri!!, "project_1")
+                val file = ProjectStorage.importVideo(context, uri!!, projectName)
                 withContext(Dispatchers.Main) {
                     importedVideoFile = file
                 }
@@ -86,7 +86,7 @@ fun EditorScreen() {
                         .height(140.dp)
                         .fillMaxWidth()
                         .background(Color(0xFF121212)),
-                    thumbDir = ProjectStorage.getThumbDir(context, importedVideoFile.nameWithoutExtension())
+                    thumbDir = ProjectStorage.getThumbDir(context, importedVideoFile.nameWithoutExtension(), projectName)
                 )
             }
         }
@@ -223,3 +223,4 @@ fun TimelineView(modifier: Modifier = Modifier, thumbDir: File) {
         }
     }
 }
+
