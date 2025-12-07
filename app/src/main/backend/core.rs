@@ -23,7 +23,7 @@ pub fn getRootPath() -> Result<&'static str, String> {
         .ok_or_else(|| "Root path not initialized".to_string())
 }
 
-pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
+pub fn extractThumbnails(video: &str, out_dir: &str) -> Result<(), String> {
     ffmpeg::init().map_err(|e| e.to_string())?;
 
     let mut ictx = input(&video).map_err(|e| e.to_string())?;
@@ -62,7 +62,7 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
             scaler.run(&frame, &mut rgb).unwrap();
 
             let out = format!("{}/thumb_{}.ppm", out_dir, keyframe_count);
-            save_ppm(&rgb, &out)?;
+            savePPM(&rgb, &out)?;
             keyframeCount += 1;
         }
     }
@@ -70,7 +70,7 @@ pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
     Ok(())
 }
 
-fn save_ppm(frame: &Video, path: &str) -> Result<(), String> {
+fn savePPM(frame: &Video, path: &str) -> Result<(), String> {
     let mut file = std::fs::File::create(path).map_err(|e| e.to_string())?;
 
     let header = format!("P6\n{} {}\n255\n", frame.width(), frame.height());
