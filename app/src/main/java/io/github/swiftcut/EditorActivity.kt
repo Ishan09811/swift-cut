@@ -2,6 +2,8 @@ package io.github.swiftcut
 
 import android.os.Bundle
 import android.util.Log
+import android.content.Context
+import android.content.Intent
 import android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -52,4 +54,5 @@ class EditorActivity : ComponentActivity() {
         }
     }
 }
+
 
