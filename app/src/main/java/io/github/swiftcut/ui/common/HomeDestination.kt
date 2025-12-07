@@ -18,6 +18,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import io.github.swiftcut.EditorActivity
+import io.github.swiftcut.utils.ProjectStorage
+import io.github.swiftcut.utils.Project
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -33,7 +35,7 @@ fun HomeDestination(navController: NavController) {
     var newProjectName by remember { mutableStateOf(TextFieldValue("")) }
 
     LaunchedEffect(Unit) {
-        //projects = ProjectStorage.loadProjects(context)
+        projects = ProjectStorage.loadProjects(context)
     }
 
     Scaffold(
@@ -65,7 +67,7 @@ fun HomeDestination(navController: NavController) {
                     ProjectCard(
                         project = project,
                         onClick = {
-                            // TODO: EditorActivity.start(context, project.name)
+                            EditorActivity.start(context, project.name)
                         }
                     )
                 }
@@ -90,7 +92,7 @@ fun HomeDestination(navController: NavController) {
                             if (name.isNotEmpty()) {
                                 scope.launch {
                                     val updated = projects + Project(name)
-                                    //saveProjects(context, updated)
+                                    ProjectStorage.saveProjects(context, updated)
                                     projects = updated
                                     newProjectName = TextFieldValue("")
                                     showDialog = false
