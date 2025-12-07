@@ -7,7 +7,7 @@ use jni::JNIEnv;
 use std::fs;
 
 #[unsafe(no_mangle)]
-pub extern "C" fn Java_io_github_swiftcut_NativeLib_init(
+pub extern "C" fn Java_io_github_swiftcut_NativeLib_initialize(
     mut env: JNIEnv,
     _class: JClass,
     jRootPath: JString
