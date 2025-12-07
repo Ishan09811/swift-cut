@@ -61,7 +61,7 @@ pub fn extractThumbnails(video: &str, out_dir: &str) -> Result<(), String> {
             let mut rgb = Video::empty();
             scaler.run(&frame, &mut rgb).unwrap();
 
-            let out = format!("{}/thumb_{}.ppm", out_dir, keyframe_count);
+            let out = format!("{}/thumb_{}.ppm", out_dir, keyframeCount);
             savePPM(&rgb, &out)?;
             keyframeCount += 1;
         }
