@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import io.github.swiftcut.EditorActivity
+import io.github.swiftcut.ui.common.HomeDestination
 
 @Preview
 @Composable
@@ -28,10 +28,7 @@ fun AppNavHost() {
         composable(
             route = "home"
         ) {
-            // TODO: HomeDestination()
+            HomeDestination(navController)
         }
     }
-
-    // TODO: HomeDestination()
-    context.startActivity(Intent(context, EditorActivity::class.java))
 }
