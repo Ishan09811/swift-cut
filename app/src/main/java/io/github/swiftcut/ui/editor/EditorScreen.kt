@@ -42,7 +42,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 @Composable
-fun EditorScreen() {
+fun EditorScreen(projectName: String) {
     var importedVideoFile by remember { mutableStateOf<File?>(null) }
     var selectedTool by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
@@ -223,4 +223,5 @@ fun TimelineView(modifier: Modifier = Modifier, thumbDir: File) {
         }
     }
 }
+
 
