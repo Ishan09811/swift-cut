@@ -14,9 +14,10 @@ class EditorActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableFullScreenImmersive()
+        val projectName = intent.getStringExtra("project_name") ?: "Untitled"
         setContent {
             SwiftCutTheme {
-               EditorScreen()
+               EditorScreen(projectName = projectName)
             }
         }
     }
@@ -51,3 +52,4 @@ class EditorActivity : ComponentActivity() {
         }
     }
 }
+
