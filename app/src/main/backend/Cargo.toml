@@ -11,3 +11,4 @@ crate-type = ["cdylib"]
 [dependencies]
 jni = "0.21"
 ffmpeg-next = { git = "https://github.com/Ishan09811/rust-ffmpeg", branch = "patch-1", features = ["build"] }
+simd-json = "0.17"
