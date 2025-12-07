@@ -8,5 +8,6 @@ class PandroidApplication : Application() {
     override fun onCreate() {
 		super.onCreate()
         NativeLib.initialize((this as Context).filesDir.absolutePath)
+		startService(Intent(this, LoggerService::class.java))
 	}
 }
