@@ -1,5 +1,5 @@
 use serde::{Serialize, Deserialize};
-use std::path::{Path}
+use std::path::Path;
 use std::fs;
 
 #[derive(Serialize, Deserialize, Debug)]
