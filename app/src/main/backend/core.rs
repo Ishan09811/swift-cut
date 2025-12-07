@@ -29,14 +29,14 @@ pub fn getRootPath() -> Result<&'static str, String> {
 }
 
 pub fn saveProjects(projects: &Vec<Project>) -> Result<(), String> { 
-    let root = get_root_path()?;
+    let root = getRootPath()?;
     let filePath = format!("{}/projects.json", root);
 
     project_util::saveProjects(&filePath, projects)
 }
 
 pub fn loadProjects() -> Result<Vec<Project>, String> {
-    let root = get_root_path()?;
+    let root = getRootPath()?;
     let filePath = format!("{}/projects.json", root);
 
     project_util::loadProjects(&filePath)
