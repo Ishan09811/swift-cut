@@ -6,7 +6,7 @@ import android.content.Intent
 
 class PandroidApplication : Application() {
     override fun onCreate() {
+		super.onCreate()
         NativeLib.initialize((this as Context).filesDir.absolutePath)
-		    super.onCreate()
-	  }
+	}
 }
