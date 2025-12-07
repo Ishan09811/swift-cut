@@ -6,6 +6,22 @@ use ffmpeg::{
 use ffmpeg::format::input;
 use ffmpeg::software::scaling::{context::Context as Scaler, flag::Flags};
 use ffmpeg::util::frame::video::Video;
+use std::sync::OnceLock;
+
+static ROOT_PATH: OnceLock<String> = OnceLock::new();
+
+pub fn init(path: &str) -> Result<(), String> {
+    ROOT_PATH
+        .set(path.to_string())
+        .map_err(|_| "Root path already initialized".to_string())
+}
+
+pub fn getRootPath() -> Result<&'static str, String> {
+    ROOT_PATH
+        .get()
+        .map(|s| s.as_str())
+        .ok_or_else(|| "Root path not initialized".to_string())
+}
 
 pub fn extract_thumbnails(video: &str, out_dir: &str) -> Result<(), String> {
     ffmpeg::init().map_err(|e| e.to_string())?;
