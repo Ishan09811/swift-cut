@@ -62,8 +62,8 @@ fun EditorScreen(project: Project) {
                 val file = ProjectStorage.importVideo(context, uri!!, project.name)
                 withContext(Dispatchers.Main) {
                     val video = ProjectVideo(
-                        path = file.absolutePath,
-                        durationMs = 0000L,
+                        path = file!!.absolutePath,
+                        durationMs = 0L,
                         thumbDir = ProjectStorage.getThumbDir(context, file.nameWithoutExtension, project.name).absolutePath
                     )
                     projectState.videos.add(video)
@@ -280,3 +280,4 @@ fun TransitionButton(onClick: () -> Unit) {
         Icon(Icons.Default.Add, contentDescription = "Add Transition")
     }
 }
+
