@@ -67,7 +67,7 @@ fun HomeDestination(navController: NavController) {
                     ProjectCard(
                         project = project,
                         onClick = {
-                            EditorActivity.start(context, project.name)
+                            EditorActivity.start(context, project)
                         }
                     )
                 }
