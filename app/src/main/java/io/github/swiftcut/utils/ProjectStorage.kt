@@ -13,8 +13,23 @@ import java.io.FileOutputStream
 import java.io.InputStream
 
 @Serializable
+data class ProjectVideo(
+    val path: String,
+    val durationMs: Long,
+    val thumbDir: String
+)
+
+@Serializable
+data class Transition(
+    val type: String,
+    val durationMs: Long
+)
+
+@Serializable
 data class Project(
-    val name: String
+    val name: String,
+    val videos: MutableList<ProjectVideo> = mutableListOf(),
+    val transitions: MutableList<Transition?> = mutableListOf()
 )
 
 object ProjectStorage {
