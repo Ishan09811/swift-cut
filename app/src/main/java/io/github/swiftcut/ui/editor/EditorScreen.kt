@@ -81,12 +81,20 @@ fun EditorScreen(projectName: String) {
                     videoUri = if (importedVideoFile != null) Uri.fromFile(importedVideoFile) else null
                 )
 
+                var isTimelineSelected by remember { mutableStateOf(false) }
+                
                 TimelineView(
                     modifier = Modifier
                         .height(140.dp)
                         .fillMaxWidth()
                         .background(Color(0xFF121212)),
-                    thumbDir = ProjectStorage.getThumbDir(context, importedVideoFile.nameWithoutExtension(), projectName)
+                    thumbDir = ProjectStorage.getThumbDir(
+                        context, 
+                        importedVideoFile.nameWithoutExtension(), 
+                        projectName
+                    ),
+                    isSelected = isTimelineSelected,
+                    onSelect = { isTimelineSelected = true }
                 )
             }
         }
@@ -182,7 +190,13 @@ fun ToolPanel(
 }
 
 @Composable
-fun TimelineView(modifier: Modifier = Modifier, thumbDir: File) {
+fun TimelineView(
+    modifier: Modifier = Modifier, 
+    thumbDir: File,
+    isSelected: Boolean,
+    onSelect: () -> Unit
+) {
+    val colors = MaterialTheme.colorScheme
     val thumbs = remember(thumbDir) {
         if (!thumbDir.exists()) emptyList()
         else {
@@ -195,33 +209,46 @@ fun TimelineView(modifier: Modifier = Modifier, thumbDir: File) {
             thumbs.map { PPMLoader.loadPPM(it) }
         }
     }
-    
-    LazyRow(
-        modifier = modifier.padding(12.dp),
-        verticalAlignment = Alignment.CenterVertically
+
+    Box(
+        modifier = modifier
+            .padding(12.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .border(
+                width = if (isSelected) 3.dp else 1.dp,
+                color = if (isSelected) colors.primary else colors.outline,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable { onSelect() }
+            .padding(12.dp)
     ) {
-        items(bitmaps.value) { bmp ->
-            if (bmp != null) {
-                Image(
-                    bitmap = bmp.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(80.dp)
-                        .height(60.dp)
-                        .padding(end = 4.dp)
-                        .background(Color.DarkGray, RoundedCornerShape(6.dp))
-                )
-            } else {
-                Box(
-                    modifier = Modifier
-                        .width(80.dp)
-                        .height(60.dp)
-                        .padding(end = 4.dp)
-                        .background(Color.Gray, RoundedCornerShape(6.dp))
-                )
+        LazyRow(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            items(bitmaps.value) { bmp ->
+                if (bmp != null) {
+                    Image(
+                        bitmap = bmp.asImageBitmap(),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(60.dp)
+                            .padding(end = 4.dp)
+                            .background(Color.DarkGray, RoundedCornerShape(6.dp))
+                    )
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(60.dp)
+                            .padding(end = 4.dp)
+                            .background(Color.Gray, RoundedCornerShape(6.dp))
+                    )
+                }
             }
         }
     }
 }
+
 
 
