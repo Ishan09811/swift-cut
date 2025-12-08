@@ -1,5 +1,6 @@
 package io.github.swiftcut
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.content.Context
@@ -16,8 +17,14 @@ import io.github.swiftcut.utils.Project
 class EditorActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableFullScreenImmersive()
-        val project = intent.getSerializableExtra("project", Project::class.java)
+        enableFullScreenImmersive() 
+        
+        val project = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra("project", Project::class.java)
+        } else {
+            intent.getSerializableExtra("project") as? Project
+        }
+        
         setContent {
             SwiftCutTheme {
                EditorScreen(project!!)
@@ -55,4 +62,3 @@ class EditorActivity : ComponentActivity() {
         }
     }
 }
-
