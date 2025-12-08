@@ -93,7 +93,7 @@ fun EditorScreen(project: Project) {
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth(),
-                    videoUri = if (projectState.videos[0] != null) Uri.fromFile(File(projectState.videos[0].path)) else null
+                    videoUri = if (projectState.videos.isNotEmpty()) Uri.fromFile(File(projectState.videos[0].path)) else null
                 )
 
                 LazyRow {
@@ -281,5 +281,3 @@ fun TransitionButton(onClick: () -> Unit) {
         Icon(Icons.Default.Add, contentDescription = "Add Transition")
     }
 }
-
-
