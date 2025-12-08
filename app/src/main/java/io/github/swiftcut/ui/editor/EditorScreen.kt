@@ -10,6 +10,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -68,7 +69,7 @@ fun EditorScreen(project: Project) {
                     )
                     projectState.videos.add(video)
                     projectState.transitions.add(null)
-                    ProjectStorage.saveProject(projectState)
+                    ProjectStorage.saveProject(context, projectState)
                 }
             }
         }
@@ -92,7 +93,7 @@ fun EditorScreen(project: Project) {
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth(),
-                    videoUri = if (importedVideoFile != null) Uri.fromFile(importedVideoFile) else null
+                    videoUri = if (projectState.videos[0] != null) Uri.fromFile(File(projectState.videos[0].path)) else null
                 )
 
                 LazyRow {
@@ -280,4 +281,5 @@ fun TransitionButton(onClick: () -> Unit) {
         Icon(Icons.Default.Add, contentDescription = "Add Transition")
     }
 }
+
 
