@@ -121,6 +121,24 @@ object ProjectStorage {
         }
     }
 
+    fun saveProject(context: Context, project: Project) {
+        try {
+            val existing = loadProjects(context).toMutableList()
+
+            val index = existing.indexOfFirst { it.name == project.name }
+            if (index >= 0) {
+                existing[index] = project
+            } else {
+                existing.add(project)
+            }
+
+            saveProjects(context, existing)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     fun File?.nameWithoutExtension(): String {
         if (this == null) return "imported_video"
         val name = this.name
