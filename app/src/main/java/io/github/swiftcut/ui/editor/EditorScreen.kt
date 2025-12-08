@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.draw.clip
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.common.MediaItem
 import io.github.swiftcut.R
@@ -249,6 +250,7 @@ fun TimelineView(
         }
     }
 }
+
 
 
 
