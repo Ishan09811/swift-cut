@@ -38,6 +38,7 @@ import androidx.media3.common.MediaItem
 import io.github.swiftcut.R
 import io.github.swiftcut.utils.PPMLoader
 import io.github.swiftcut.utils.Project
+import io.github.swiftcut.utils.ProjectVideo
 import io.github.swiftcut.utils.ProjectStorage
 import io.github.swiftcut.utils.ProjectStorage.nameWithoutExtension 
 import kotlinx.coroutines.Dispatchers
@@ -47,10 +48,12 @@ import java.io.File
 
 @Composable
 fun EditorScreen(project: Project) {
-    var importedVideoFile by remember { mutableStateOf<File?>(null) }
     var selectedTool by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
+    var projectState by remember { mutableStateOf(project) }
+    var selectedIndex by remember { mutableStateOf(-1) }
 
     val videoPickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
@@ -58,7 +61,14 @@ fun EditorScreen(project: Project) {
             scope.launch(Dispatchers.IO) {
                 val file = ProjectStorage.importVideo(context, uri!!, project.name)
                 withContext(Dispatchers.Main) {
-                    importedVideoFile = file
+                    val video = ProjectVideo(
+                        path = file.absolutePath,
+                        durationMs = 0000L,
+                        thumbDir = ProjectStorage.getThumbDir(context, file.nameWithoutExtension, project.name).absolutePath
+                    )
+                    projectState.videos.add(video)
+                    projectState.transitions.add(null)
+                    ProjectStorage.saveProject(projectState)
                 }
             }
         }
@@ -85,21 +95,25 @@ fun EditorScreen(project: Project) {
                     videoUri = if (importedVideoFile != null) Uri.fromFile(importedVideoFile) else null
                 )
 
-                var isTimelineSelected by remember { mutableStateOf(false) }
-                
-                TimelineView(
-                    modifier = Modifier
-                        .height(140.dp)
-                        .fillMaxWidth()
-                        .background(Color(0xFF121212)),
-                    thumbDir = ProjectStorage.getThumbDir(
-                        context, 
-                        importedVideoFile.nameWithoutExtension(), 
-                        project.name
-                    ),
-                    isSelected = isTimelineSelected,
-                    onSelect = { isTimelineSelected = true }
-                )
+                LazyRow {
+                    itemsIndexed(projectState.videos) { index, video ->
+                        TimelineView(
+                            modifier = Modifier
+                                .height(140.dp)
+                                .fillMaxWidth()
+                                .background(Color(0xFF121212)),
+                            thumbDir = File(video.thumbDir),
+                            isSelected = selectedIndex == index,
+                            onSelect = { selectedIndex = index }
+                        )
+
+                        if (index < projectState.videos.lastIndex) {
+                            TransitionButton(
+                                onClick = {}
+                            )
+                        }
+                    }
+                }
             }
         }
 
@@ -253,10 +267,16 @@ fun TimelineView(
     }
 }
 
-
-
-
-
-
-
-
+@Composable
+fun TransitionButton(onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .size(60.dp)
+            .padding(horizontal = 4.dp)
+            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(10.dp))
+            .clickable { onClick() },
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(Icons.Default.Add, contentDescription = "Add Transition")
+    }
+}
