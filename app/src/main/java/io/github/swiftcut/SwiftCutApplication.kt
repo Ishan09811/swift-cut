@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import io.github.swiftcut.services.LoggerService
 
-class PandroidApplication : Application() {
+class SwiftCutApplication : Application() {
     override fun onCreate() {
 		super.onCreate()
         NativeLib.initialize((this as Context).filesDir.absolutePath)
