@@ -4,33 +4,34 @@ package io.github.swiftcut.utils
 import android.content.Context
 import android.net.Uri
 import io.github.swiftcut.NativeLib
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.Serializable as KxSerializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
+import java.io.Serializable
 
-@Serializable
+@KxSerializable
 data class ProjectVideo(
     val path: String,
     val durationMs: Long,
     val thumbDir: String
-)
+) : Serializable
 
-@Serializable
+@KxSerializable
 data class Transition(
     val type: String,
     val durationMs: Long
-)
+) : Serializable
 
-@Serializable
+@KxSerializable
 data class Project(
     val name: String,
     val videos: MutableList<ProjectVideo> = mutableListOf(),
     val transitions: MutableList<Transition?> = mutableListOf()
-)
+) : Serializable
 
 object ProjectStorage {
     
