@@ -223,7 +223,6 @@ fun TimelineView(
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable { onSelect() }
-            .padding(12.dp)
     ) {
         LazyRow(
             verticalAlignment = Alignment.CenterVertically
@@ -252,6 +251,7 @@ fun TimelineView(
         }
     }
 }
+
 
 
 
