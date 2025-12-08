@@ -37,6 +37,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.common.MediaItem
 import io.github.swiftcut.R
 import io.github.swiftcut.utils.PPMLoader
+import io.github.swiftcut.utils.Project
 import io.github.swiftcut.utils.ProjectStorage
 import io.github.swiftcut.utils.ProjectStorage.nameWithoutExtension 
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +46,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 @Composable
-fun EditorScreen(projectName: String) {
+fun EditorScreen(project: Project) {
     var importedVideoFile by remember { mutableStateOf<File?>(null) }
     var selectedTool by remember { mutableStateOf<String?>(null) }
     val context = LocalContext.current
@@ -55,7 +56,7 @@ fun EditorScreen(projectName: String) {
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
             scope.launch(Dispatchers.IO) {
-                val file = ProjectStorage.importVideo(context, uri!!, projectName)
+                val file = ProjectStorage.importVideo(context, uri!!, project.name)
                 withContext(Dispatchers.Main) {
                     importedVideoFile = file
                 }
@@ -94,7 +95,7 @@ fun EditorScreen(projectName: String) {
                     thumbDir = ProjectStorage.getThumbDir(
                         context, 
                         importedVideoFile.nameWithoutExtension(), 
-                        projectName
+                        project.name
                     ),
                     isSelected = isTimelineSelected,
                     onSelect = { isTimelineSelected = true }
@@ -251,6 +252,7 @@ fun TimelineView(
         }
     }
 }
+
 
 
 
