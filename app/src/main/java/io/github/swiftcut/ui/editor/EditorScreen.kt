@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -236,7 +237,7 @@ fun TimelineView(
                             .width(80.dp)
                             .height(60.dp)
                             .padding(end = 4.dp)
-                            .background(Color.DarkGray, RoundedCornerShape(6.dp))
+                            .background(colors.surfaceVariant, RoundedCornerShape(6.dp))
                     )
                 } else {
                     Box(
@@ -244,13 +245,14 @@ fun TimelineView(
                             .width(80.dp)
                             .height(60.dp)
                             .padding(end = 4.dp)
-                            .background(Color.Gray, RoundedCornerShape(6.dp))
+                            .background(colors.surfaceVariant, RoundedCornerShape(6.dp))
                     )
                 }
             }
         }
     }
 }
+
 
 
 
