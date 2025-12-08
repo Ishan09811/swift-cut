@@ -50,8 +50,9 @@ class EditorActivity : ComponentActivity() {
     companion object {
         fun start(context: Context, project: Project) {
             val intent = Intent(context, EditorActivity::class.java)
-            intent.putExtra("project", project as Serializable)
+            intent.putExtra("project", project)
             context.startActivity(intent)
         }
     }
 }
+
