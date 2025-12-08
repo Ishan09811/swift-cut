@@ -11,15 +11,16 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import io.github.swiftcut.ui.editor.EditorScreen
+import io.github.swiftcut.utils.Project
 
 class EditorActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableFullScreenImmersive()
-        val projectName = intent.getStringExtra("project_name") ?: "Untitled"
+        val project = intent.getSerializableExtra("project", Project::class.java)
         setContent {
             SwiftCutTheme {
-               EditorScreen(projectName = projectName)
+               EditorScreen(project!!)
             }
         }
     }
@@ -47,12 +48,10 @@ class EditorActivity : ComponentActivity() {
     }
 
     companion object {
-        fun start(context: Context, projectName: String) {
+        fun start(context: Context, project: Project) {
             val intent = Intent(context, EditorActivity::class.java)
-            intent.putExtra("project_name", projectName)
+            intent.putExtra("project", project as Serializable)
             context.startActivity(intent)
         }
     }
 }
-
-
