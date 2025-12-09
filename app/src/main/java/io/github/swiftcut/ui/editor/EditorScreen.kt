@@ -101,7 +101,7 @@ fun EditorScreen(project: Project) {
                         TimelineView(
                             modifier = Modifier
                                 .height(140.dp)
-                                .fillMaxWidth()
+                                .width(IntrinsicSize.Min)
                                 .background(Color(0xFF121212)),
                             thumbDir = File(video.thumbDir),
                             isSelected = selectedIndex == index,
@@ -281,3 +281,4 @@ fun TransitionButton(onClick: () -> Unit) {
         Icon(Icons.Default.Add, contentDescription = "Add Transition")
     }
 }
+
