@@ -67,8 +67,12 @@ fun EditorScreen(project: Project) {
                         durationMs = 0L,
                         thumbDir = ProjectStorage.getThumbDir(context, file.nameWithoutExtension, project.name).absolutePath
                     )
-                    projectState.videos.add(video)
-                    projectState.transitions.add(null)
+                    
+                    projectState = projectState.copy(
+                        videos = projectState.videos + video,
+                        transitions = projectState.transitions + listOf(null)
+                    )
+                    
                     ProjectStorage.saveProject(context, projectState)
                 }
             }
@@ -281,6 +285,7 @@ fun TransitionButton(onClick: () -> Unit) {
         Icon(Icons.Default.Add, contentDescription = "Add Transition")
     }
 }
+
 
 
 
