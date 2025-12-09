@@ -235,6 +235,7 @@ fun TimelineView(
 
     Box(
         modifier = modifier
+            .height(60.dp)
             .padding(12.dp)
             .clip(RoundedCornerShape(12.dp))
             .border(
@@ -285,8 +286,3 @@ fun TransitionButton(onClick: () -> Unit) {
         Icon(Icons.Default.Add, contentDescription = "Add Transition")
     }
 }
-
-
-
-
-
