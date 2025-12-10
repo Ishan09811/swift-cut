@@ -69,8 +69,8 @@ fun EditorScreen(project: Project) {
                     )
                     
                     projectState = projectState.copy(
-                        videos = projectState.videos + video,
-                        transitions = projectState.transitions + listOf(null)
+                        videos = (projectState.videos + video).toMutableList(),
+                        transitions = (projectState.transitions + null).toMutableList()
                     )
                     
                     ProjectStorage.saveProject(context, projectState)
@@ -97,7 +97,7 @@ fun EditorScreen(project: Project) {
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth(),
-                    videoUri = if (projectState.videos.isNotEmpty()) Uri.fromFile(File(projectState.videos[0].path)) else null
+                    videos = projectState.videos
                 )
 
                 LazyRow {
@@ -140,7 +140,7 @@ fun EditorScreen(project: Project) {
 @Composable
 fun VideoPreview(
     modifier: Modifier = Modifier,
-    videoUri: Uri? = null
+    videos: MutableList<ProjectVideo>? = null
 ) {
     val context = LocalContext.current
     val exoPlayer = remember {
@@ -154,8 +154,17 @@ fun VideoPreview(
     }
 
     LaunchedEffect(videoUri) {
-        if (videoUri != null) {
-            exoPlayer.setMediaItem(MediaItem.fromUri(videoUri))
+        if (videos != null) {
+            if (selectedIndex != -1) {
+                val path = Uri.fromFile(File(videos[selectedIndex].path))
+                exoPlayer.setMediaItem(MediaItem.fromUri(path))
+            } else {
+                var mediaItems: MutableList<MediaItem> = mutableListOf()
+                videos.forEach {
+                    mediaItems.add(MediaItem.fromUri(Uri.fromFile(File(it.path))))
+                }
+                exoPlayer.setMediaItems(mediaItems)
+            }
             exoPlayer.prepare()
             exoPlayer.playWhenReady = true
         }
@@ -286,3 +295,4 @@ fun TransitionButton(onClick: () -> Unit) {
         Icon(Icons.Default.Add, contentDescription = "Add Transition")
     }
 }
+
