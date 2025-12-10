@@ -97,7 +97,8 @@ fun EditorScreen(project: Project) {
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth(),
-                    videos = projectState.videos
+                    videos = projectState.videos,
+                    selectedIndex = selectedIndex
                 )
 
                 LazyRow {
@@ -140,7 +141,8 @@ fun EditorScreen(project: Project) {
 @Composable
 fun VideoPreview(
     modifier: Modifier = Modifier,
-    videos: MutableList<ProjectVideo>? = null
+    videos: MutableList<ProjectVideo>? = null,
+    selectedIndex: Int
 ) {
     val context = LocalContext.current
     val exoPlayer = remember {
@@ -153,17 +155,17 @@ fun VideoPreview(
         }
     }
 
-    LaunchedEffect(videos) {
+    LaunchedEffect(videos, selectedIndex) {
         if (videos != null) {
             if (selectedIndex != -1) {
                 val path = Uri.fromFile(File(videos[selectedIndex].path))
-                exoPlayer.setMediaItem(MediaItem.fromUri(path))
+                exoPlayer.setMediaItem(MediaItem.fromUri(path), false)
             } else {
                 var mediaItems: MutableList<MediaItem> = mutableListOf()
                 videos.forEach {
                     mediaItems.add(MediaItem.fromUri(Uri.fromFile(File(it.path))))
                 }
-                exoPlayer.setMediaItems(mediaItems)
+                exoPlayer.setMediaItems(mediaItems, false)
             }
             exoPlayer.prepare()
             exoPlayer.playWhenReady = true
@@ -295,5 +297,3 @@ fun TransitionButton(onClick: () -> Unit) {
         Icon(Icons.Default.Add, contentDescription = "Add Transition")
     }
 }
-
-
