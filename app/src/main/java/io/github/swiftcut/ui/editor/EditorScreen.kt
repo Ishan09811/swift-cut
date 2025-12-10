@@ -153,7 +153,7 @@ fun VideoPreview(
         }
     }
 
-    LaunchedEffect(videoUri) {
+    LaunchedEffect(videos) {
         if (videos != null) {
             if (selectedIndex != -1) {
                 val path = Uri.fromFile(File(videos[selectedIndex].path))
@@ -295,4 +295,5 @@ fun TransitionButton(onClick: () -> Unit) {
         Icon(Icons.Default.Add, contentDescription = "Add Transition")
     }
 }
+
 
